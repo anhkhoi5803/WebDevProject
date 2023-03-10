@@ -8,16 +8,15 @@ class ManipulateDB
 {
    
     //Declare the properties
-    private $firstname, $lastname, $email;
+    private $firstname, $lastname, $username,$registrationOrder,$newPassword;
     private $connection; 
     protected $sqlExec, $lastErrMsg;
 
     //Declare the method constructor
-    public function __construct($fn, $ln, $em)
+    public function __construct($fn, $ln)
     {
         $this->firstname = $fn;
         $this->lastname = $ln;
-        $this->email = $em;
     }
 
     //Declare the method to save the messages
@@ -42,55 +41,41 @@ class ManipulateDB
     //Declare the method to save the SQL Code to be executed
     protected function sqlCode()
     {
-                $dbName = DBNAME;
-                $tabName = TABNAME;
-                //Create queries
-                $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS $dbName;";
-                $sqlCode['creatTab'] = "CREATE TABLE player( 
-                    fName VARCHAR(50) NOT NULL, 
-                    lName VARCHAR(50) NOT NULL, 
-                    userName VARCHAR(20) NOT NULL UNIQUE,
-                    registrationTime DATETIME NOT NULL,
-                    id VARCHAR(200) GENERATED ALWAYS AS (CONCAT(UPPER(LEFT(fName,2)),UPPER(LEFT(lName,2)),UPPER(LEFT(userName,3)),CAST(registrationTime AS SIGNED))),
-                    registrationOrder INTEGER AUTO_INCREMENT,
-                    PRIMARY KEY (registrationOrder)
-                )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
-                
-                CREATE TABLE authenticator(   
-                    passCode VARCHAR(255) NOT NULL,
-                    registrationOrder INTEGER, 
-                    FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
-                )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
-                
-                CREATE TABLE score( 
-                    scoreTime DATETIME NOT NULL, 
-                    result ENUM('success', 'failure', 'incomplete'),
-                    livesUsed INTEGER NOT NULL,
-                    registrationOrder INTEGER, 
-                    FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
-                )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+        $dbName = DBNAME;
+        //Create queries
+        $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS $dbName;";
+        $sqlCode['creatTab'] = "CREATE TABLE player( 
+            fName VARCHAR(50) NOT NULL, 
+            lName VARCHAR(50) NOT NULL, 
+            userName VARCHAR(20) NOT NULL UNIQUE,
+            registrationTime DATETIME NOT NULL,
+            id VARCHAR(200) GENERATED ALWAYS AS (CONCAT(UPPER(LEFT(fName,2)),UPPER(LEFT(lName,2)),UPPER(LEFT(userName,3)),CAST(registrationTime AS SIGNED))),
+            registrationOrder INTEGER AUTO_INCREMENT,
+            PRIMARY KEY (registrationOrder)
+        )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+        
+        CREATE TABLE authenticator(   
+            passCode VARCHAR(255) NOT NULL,
+            registrationOrder INTEGER, 
+            FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
+        )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+        
+        CREATE TABLE score( 
+            scoreTime DATETIME NOT NULL, 
+            result ENUM('success', 'failure', 'incomplete'),
+            livesUsed INTEGER NOT NULL,
+            registrationOrder INTEGER, 
+            FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
+        )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
                 CREATE VIEW history AS
         SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
         FROM player p, score s
         WHERE p.registrationOrder = s.registrationOrder;
 
-        --Insert into the tables (including php variables)
-
-        --  insert for function
-        -- INSERT INTO player(fName, lName, userName, registrationTime)
-        -- VALUES($first_name, $last_name, $user_name, $current_dateTime);
-
-        -- INSERT INTO authenticator(passCode,registrationOrder)
-        -- VALUES($pass_word, $user_rank);
-
-        -- INSERT INTO authenticator(passCode,registrationOrder)
-        -- VALUES($pass_word, $user_rank);
-
-        --select from the view
-        SELECT * FROM history;
+--Insert into the tables (including php variables)
 
 
-
+--select from the view
 
         --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
         INSERT INTO player(fName, lName, userName, registrationTime)
@@ -122,11 +107,19 @@ class ManipulateDB
         INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
         VALUES(now(), 'incomplete', 5, 3);";
 
-                
-        $sqlCode['descTab'] = "DESC employees;";
-        $sqlCode['selectTab'] = "SELECT * FROM employees;";
-        $sqlCode['insertTab']="INSERT INTO employees (firstname, lastname, email) 
-                    VALUES ('$this->firstname', '$this->lastname', '$this->email');";
+
+        $sqlCode['checkPlayerExist'] = "SELECT * FROM player where registrationOrder=$this->registrationOrder;";
+
+        $sqlCode['register']="INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES($this->firstname, $this->lastname, $this->username, date());";
+
+        $sqlCode['insertPassword']="INSERT INTO authenticator(passCode,registrationOrder)
+        VALUES($this->newPassword, $this->registrationOrder);";
+
+        $sqlCode['changePassword']="UPDATE authenticator SET passCode = $this->newPassword where registrationOrder= $this->registrationOrder";
+            
+        $sqlCode['checkPassword']="SELECT passCode FROM authenticator where registrationOrder= $this->registrationOrder";
+        
         //Return an array of queries
         return $sqlCode;
     }
