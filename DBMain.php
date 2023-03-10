@@ -1,7 +1,9 @@
 <?php
- define('HOST','localhost');
- define('USER','root');
- define('PASS','');
+define('HOST','localhost');
+define('USER','root');
+define('PASS','');
+define('DBNAME','users');
+define('TABNAME','employees');
 class ManipulateDB
 {
    
@@ -38,25 +40,96 @@ class ManipulateDB
     }
 
     //Declare the method to save the SQL Code to be executed
-    // protected function sqlCode()
-    // {
-    //     $dbName = DBNAME;
-    //     $tabName = TABNAME;
-    //     //Create queries
-    //     $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS $dbName;";
-    //     $sqlCode['creatTab'] = "CREATE TABLE IF NOT EXISTS $tabName(
-    //         id INT PRIMARY KEY AUTO_INCREMENT,
-    //         firstname VARCHAR(35) NOT NULL,
-    //         lastname VARCHAR(35) NOT NULL,
-    //         email VARCHAR(35) NOT NULL
-    //         ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;";
-    //     $sqlCode['descTab'] = "DESC employees;";
-    //     $sqlCode['selectTab'] = "SELECT * FROM employees;";
-    //     $sqlCode['insertTab']="INSERT INTO employees (firstname, lastname, email) 
-    //                 VALUES ('$this->firstname', '$this->lastname', '$this->email');";
-    //     //Return an array of queries
-    //     return $sqlCode;
-    // }
+    protected function sqlCode()
+    {
+                $dbName = DBNAME;
+                $tabName = TABNAME;
+                //Create queries
+                $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS $dbName;";
+                $sqlCode['creatTab'] = "CREATE TABLE player( 
+                    fName VARCHAR(50) NOT NULL, 
+                    lName VARCHAR(50) NOT NULL, 
+                    userName VARCHAR(20) NOT NULL UNIQUE,
+                    registrationTime DATETIME NOT NULL,
+                    id VARCHAR(200) GENERATED ALWAYS AS (CONCAT(UPPER(LEFT(fName,2)),UPPER(LEFT(lName,2)),UPPER(LEFT(userName,3)),CAST(registrationTime AS SIGNED))),
+                    registrationOrder INTEGER AUTO_INCREMENT,
+                    PRIMARY KEY (registrationOrder)
+                )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+                
+                CREATE TABLE authenticator(   
+                    passCode VARCHAR(255) NOT NULL,
+                    registrationOrder INTEGER, 
+                    FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
+                )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+                
+                CREATE TABLE score( 
+                    scoreTime DATETIME NOT NULL, 
+                    result ENUM('success', 'failure', 'incomplete'),
+                    livesUsed INTEGER NOT NULL,
+                    registrationOrder INTEGER, 
+                    FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
+                )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+                CREATE VIEW history AS
+        SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
+        FROM player p, score s
+        WHERE p.registrationOrder = s.registrationOrder;
+
+        --Insert into the tables (including php variables)
+
+        --  insert for function
+        -- INSERT INTO player(fName, lName, userName, registrationTime)
+        -- VALUES($first_name, $last_name, $user_name, $current_dateTime);
+
+        -- INSERT INTO authenticator(passCode,registrationOrder)
+        -- VALUES($pass_word, $user_rank);
+
+        -- INSERT INTO authenticator(passCode,registrationOrder)
+        -- VALUES($pass_word, $user_rank);
+
+        --select from the view
+        SELECT * FROM history;
+
+
+
+
+        --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
+        INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES('Patrick','Saint-Louis', 'sonic12345', now()); 
+        INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES('Marie','Jourdain', 'asterix2023', now());
+        INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES('Jonathan','David', 'pokemon527', now()); 
+        --------------------------------------------------
+
+        --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
+        INSERT INTO authenticator(passCode, registrationOrder)
+        VALUES('$2y$10\$fxMTc4KD4mZlj03wc4grTuVLssP0ZKxeqfcfvxVx2xnrrKF.CKsk.', 1);
+
+        INSERT INTO authenticator(passCode, registrationOrder)
+        VALUES('$2y$10\$AH/612QosAUyKIy5s4lEBuGdNAhnw.PbHYfIuLNK2aHQXWRMIF6fi', 2);
+
+        INSERT INTO authenticator(passCode, registrationOrder)
+        VALUES('$2y$10\$rSNEZ5wd8YyRRlNCmwfb2uUvkffrAMdmLkcm5s.b7WAgiGy8UoA1i', 3);
+        --------------------------------------------------
+
+        --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
+        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        VALUES(now(), 'success', 4, 1);
+
+        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        VALUES(now(), 'failure', 6, 2);
+
+        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        VALUES(now(), 'incomplete', 5, 3);";
+
+                
+        $sqlCode['descTab'] = "DESC employees;";
+        $sqlCode['selectTab'] = "SELECT * FROM employees;";
+        $sqlCode['insertTab']="INSERT INTO employees (firstname, lastname, email) 
+                    VALUES ('$this->firstname', '$this->lastname', '$this->email');";
+        //Return an array of queries
+        return $sqlCode;
+    }
 
     //Declare the method to connect to the DBMS
     protected function connectToDBMS()
@@ -77,7 +150,7 @@ class ManipulateDB
     protected function connectToDB()
     {
         //If connection to the Database failed save the system error message 
-        if (mysqli_select_db($this->connection, '') === FALSE) {
+        if (mysqli_select_db($this->connection, DBNAME) === FALSE) {
             $this->lastErrMsg = $this->connection->error;
             return FALSE;
         } else {
@@ -123,8 +196,8 @@ class ManipulateDB
     public function __destruct()
     {
         //Close automatically the connection from MySQL when it is opened at the end          
-        if ($this->connection === TRUE) {
-           // $this->connection->close();
+        if ($this->connection == TRUE) {
+            $this->connection->close();
         }
     }
 }
