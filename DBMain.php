@@ -38,25 +38,25 @@ class ManipulateDB
     }
 
     //Declare the method to save the SQL Code to be executed
-    protected function sqlCode()
-    {
-        $dbName = DBNAME;
-        $tabName = TABNAME;
-        //Create queries
-        $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS $dbName;";
-        $sqlCode['creatTab'] = "CREATE TABLE IF NOT EXISTS $tabName(
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            firstname VARCHAR(35) NOT NULL,
-            lastname VARCHAR(35) NOT NULL,
-            email VARCHAR(35) NOT NULL
-            ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;";
-        $sqlCode['descTab'] = "DESC employees;";
-        $sqlCode['selectTab'] = "SELECT * FROM employees;";
-        $sqlCode['insertTab']="INSERT INTO employees (firstname, lastname, email) 
-                    VALUES ('$this->firstname', '$this->lastname', '$this->email');";
-        //Return an array of queries
-        return $sqlCode;
-    }
+    // protected function sqlCode()
+    // {
+    //     $dbName = DBNAME;
+    //     $tabName = TABNAME;
+    //     //Create queries
+    //     $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS $dbName;";
+    //     $sqlCode['creatTab'] = "CREATE TABLE IF NOT EXISTS $tabName(
+    //         id INT PRIMARY KEY AUTO_INCREMENT,
+    //         firstname VARCHAR(35) NOT NULL,
+    //         lastname VARCHAR(35) NOT NULL,
+    //         email VARCHAR(35) NOT NULL
+    //         ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;";
+    //     $sqlCode['descTab'] = "DESC employees;";
+    //     $sqlCode['selectTab'] = "SELECT * FROM employees;";
+    //     $sqlCode['insertTab']="INSERT INTO employees (firstname, lastname, email) 
+    //                 VALUES ('$this->firstname', '$this->lastname', '$this->email');";
+    //     //Return an array of queries
+    //     return $sqlCode;
+    // }
 
     //Declare the method to connect to the DBMS
     protected function connectToDBMS()
@@ -77,7 +77,7 @@ class ManipulateDB
     protected function connectToDB()
     {
         //If connection to the Database failed save the system error message 
-        if (mysqli_select_db($this->connection, DBNAME) === FALSE) {
+        if (mysqli_select_db($this->connection, '') === FALSE) {
             $this->lastErrMsg = $this->connection->error;
             return FALSE;
         } else {
@@ -124,7 +124,7 @@ class ManipulateDB
     {
         //Close automatically the connection from MySQL when it is opened at the end          
         if ($this->connection === TRUE) {
-            $this->connection->close();
+           // $this->connection->close();
         }
     }
 }
