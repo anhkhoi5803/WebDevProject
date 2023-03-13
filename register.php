@@ -10,6 +10,7 @@ Web Server Project - Registration Form
 <?php
 
 require_once "process.php";
+require_once "functions.php";
 
 ?>
 
@@ -30,7 +31,8 @@ require_once "process.php";
     <div class="wrapper">
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
-        <form action="process.php" method="post">
+        
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
 
             <div class="form-group">
                 <label>Username</label>
@@ -63,7 +65,7 @@ require_once "process.php";
             </div>
 
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Create">                
+                <input type="submit" class="btn btn-primary" value="Create" name = "send">                
             </div>
             <p>Already have an account? <a href="">Login here</a>.</p>
         </form>
