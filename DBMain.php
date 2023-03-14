@@ -2,8 +2,8 @@
 define('HOST','localhost');
 define('USER','root');
 define('PASS','');
-define('DBNAME','users');
-define('TABNAME','employees');
+
+define('DBNAME','kidsGames');
 class ManipulateDB
 {
    
@@ -43,8 +43,10 @@ class ManipulateDB
     {
         $dbName = DBNAME;
         //Create queries
-        $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS $dbName;";
-        $sqlCode['creatTab'] = "CREATE TABLE player( 
+        $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS kidsGames;";
+
+        $sqlCode['creatTabs'] = 
+        "CREATE TABLE player( 
             fName VARCHAR(50) NOT NULL, 
             lName VARCHAR(50) NOT NULL, 
             userName VARCHAR(20) NOT NULL UNIQUE,
@@ -67,50 +69,47 @@ class ManipulateDB
             registrationOrder INTEGER, 
             FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
         )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
-                CREATE VIEW history AS
-        SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
-        FROM player p, score s
-        WHERE p.registrationOrder = s.registrationOrder;
-
---Insert into the tables (including php variables)
-
-
---select from the view
+        
+        CREATE VIEW history AS
+            SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
+            FROM player p, score s
+            WHERE p.registrationOrder = s.registrationOrder;
 
         --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
-        INSERT INTO player(fName, lName, userName, registrationTime)
-        VALUES('Patrick','Saint-Louis', 'sonic12345', now()); 
-        INSERT INTO player(fName, lName, userName, registrationTime)
-        VALUES('Marie','Jourdain', 'asterix2023', now());
-        INSERT INTO player(fName, lName, userName, registrationTime)
-        VALUES('Jonathan','David', 'pokemon527', now()); 
+        -- INSERT INTO player(fName, lName, userName, registrationTime)
+        -- VALUES('Patrick','Saint-Louis', 'sonic12345', now()); 
+        -- INSERT INTO player(fName, lName, userName, registrationTime)
+        -- VALUES('Marie','Jourdain', 'asterix2023', now());
+        -- INSERT INTO player(fName, lName, userName, registrationTime)
+        -- VALUES('Jonathan','David', 'pokemon527', now()); 
         --------------------------------------------------
 
         --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
-        INSERT INTO authenticator(passCode, registrationOrder)
-        VALUES('$2y$10\$fxMTc4KD4mZlj03wc4grTuVLssP0ZKxeqfcfvxVx2xnrrKF.CKsk.', 1);
+        -- INSERT INTO authenticator(passCode, registrationOrder)
+        -- VALUES('$2y$10\$fxMTc4KD4mZlj03wc4grTuVLssP0ZKxeqfcfvxVx2xnrrKF.CKsk.', 1);
 
-        INSERT INTO authenticator(passCode, registrationOrder)
-        VALUES('$2y$10\$AH/612QosAUyKIy5s4lEBuGdNAhnw.PbHYfIuLNK2aHQXWRMIF6fi', 2);
+        -- INSERT INTO authenticator(passCode, registrationOrder)
+        -- VALUES('$2y$10\$AH/612QosAUyKIy5s4lEBuGdNAhnw.PbHYfIuLNK2aHQXWRMIF6fi', 2);
 
-        INSERT INTO authenticator(passCode, registrationOrder)
-        VALUES('$2y$10\$rSNEZ5wd8YyRRlNCmwfb2uUvkffrAMdmLkcm5s.b7WAgiGy8UoA1i', 3);
+        -- INSERT INTO authenticator(passCode, registrationOrder)
+        -- VALUES('$2y$10\$rSNEZ5wd8YyRRlNCmwfb2uUvkffrAMdmLkcm5s.b7WAgiGy8UoA1i', 3);
         --------------------------------------------------
 
         --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
-        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
-        VALUES(now(), 'success', 4, 1);
+        -- INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        -- VALUES(now(), 'success', 4, 1);
 
-        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
-        VALUES(now(), 'failure', 6, 2);
+        -- INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        -- VALUES(now(), 'failure', 6, 2);
 
-        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
-        VALUES(now(), 'incomplete', 5, 3);";
+        -- INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        -- VALUES(now(), 'incomplete', 5, 3);
+        ";
 
 
         $sqlCode['checkPlayerExist'] = "SELECT * FROM player where registrationOrder=$this->registrationOrder;";
 
-        $sqlCode['register']="INSERT INTO player(fName, lName, userName, registrationTime)
+        $sqlCode['register']="INSERT INTO player(fName, lName, userName, registrationTime) 
         VALUES($this->firstname, $this->lastname, $this->username, date());";
 
         $sqlCode['insertPassword']="INSERT INTO authenticator(passCode,registrationOrder)
@@ -118,7 +117,7 @@ class ManipulateDB
 
         $sqlCode['changePassword']="UPDATE authenticator SET passCode = $this->newPassword where registrationOrder= $this->registrationOrder";
             
-        $sqlCode['checkPassword']="SELECT passCode FROM authenticator where registrationOrder= $this->registrationOrder";
+        $sqlCode['checkPasswordExists']="SELECT passCode FROM authenticator where registrationOrder= $this->registrationOrder";
         
         //Return an array of queries
         return $sqlCode;
@@ -165,25 +164,6 @@ class ManipulateDB
         return TRUE;
     }
 
-    //Declare the method to display selected data 
-    protected function displaySelectData(){
-        //Calculate the number of rows available
-        $number_of_rows = $this->sqlExec->num_rows;
-        //Use a loop to display the rows one by one
-        echo "<table>";
-        echo "<tr><td>ID</td><td>First Name</td><td>Last Name</td><td>Email</td></tr>";
-        for ($j = 0; $j < $number_of_rows; ++$j) {
-            echo "<tr>";
-            //Assign the records of each row to an associative array
-            $each_row = $this->sqlExec->fetch_array(MYSQLI_ASSOC);
-            //Display each the record corresponding to each column
-            foreach ($each_row as $item)
-                echo "<td>" . $item . "</td>";
-            echo "</tr>";
-        }   
-        echo "</table>";
-    }
-    
 
     //Declare the method to disconnect from the DBMS
     public function __destruct()
