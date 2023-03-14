@@ -17,7 +17,7 @@ function usernameValidation($username){
     elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($username))){
         $username_err = "Username can only contain letters, numbers, and underscores.";
     }else{
-        return trim($username);
+        return strtolower(trim($username));
     }
 }
 
@@ -90,6 +90,29 @@ function errorValidation(){
    
 }
 
+// ************************* Login functions ****************************************
+
+// Declare and initializing variable with empty values
+$login_err = "";
+
+/// Validate no username and password error
+function validateNoError(){
+    
+    if(empty($username_err) && empty($password_err))
+        return true;
+    else
+        return false;
+}
+
+
 // ************************* Add below other functions ****************************************
+
+function validatePasswordModify(){
+    
+    if(empty($username_err) && empty($password_err) && empty($confirm_password_err))
+        return true;
+    else
+        return false;
+}
 
 ?>
