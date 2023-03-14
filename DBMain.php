@@ -2,21 +2,20 @@
 define('HOST','localhost');
 define('USER','root');
 define('PASS','');
-
 define('DBNAME','kidsGames');
 class ManipulateDB
 {
    
     //Declare the properties
-    private $firstname, $lastname, $username,$registrationOrder,$newPassword;
+    public $firstname, $lastname, $username,$registrationOrder,$newPassword;
     private $connection; 
     protected $sqlExec, $lastErrMsg;
 
     //Declare the method constructor
-    public function __construct($fn, $ln)
+    public function __construct()
     {
-        $this->firstname = $fn;
-        $this->lastname = $ln;
+
+
     }
 
     //Declare the method to save the messages
@@ -41,7 +40,6 @@ class ManipulateDB
     //Declare the method to save the SQL Code to be executed
     protected function sqlCode()
     {
-        $dbName = DBNAME;
         //Create queries
         $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS kidsGames;";
 
@@ -74,40 +72,12 @@ class ManipulateDB
             SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
             FROM player p, score s
             WHERE p.registrationOrder = s.registrationOrder;
-
-        --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
-        -- INSERT INTO player(fName, lName, userName, registrationTime)
-        -- VALUES('Patrick','Saint-Louis', 'sonic12345', now()); 
-        -- INSERT INTO player(fName, lName, userName, registrationTime)
-        -- VALUES('Marie','Jourdain', 'asterix2023', now());
-        -- INSERT INTO player(fName, lName, userName, registrationTime)
-        -- VALUES('Jonathan','David', 'pokemon527', now()); 
-        --------------------------------------------------
-
-        --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
-        -- INSERT INTO authenticator(passCode, registrationOrder)
-        -- VALUES('$2y$10\$fxMTc4KD4mZlj03wc4grTuVLssP0ZKxeqfcfvxVx2xnrrKF.CKsk.', 1);
-
-        -- INSERT INTO authenticator(passCode, registrationOrder)
-        -- VALUES('$2y$10\$AH/612QosAUyKIy5s4lEBuGdNAhnw.PbHYfIuLNK2aHQXWRMIF6fi', 2);
-
-        -- INSERT INTO authenticator(passCode, registrationOrder)
-        -- VALUES('$2y$10\$rSNEZ5wd8YyRRlNCmwfb2uUvkffrAMdmLkcm5s.b7WAgiGy8UoA1i', 3);
-        --------------------------------------------------
-
-        --SAMPLE DATA TO TEST INSERT MANUALLY ------------------------
-        -- INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
-        -- VALUES(now(), 'success', 4, 1);
-
-        -- INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
-        -- VALUES(now(), 'failure', 6, 2);
-
-        -- INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
-        -- VALUES(now(), 'incomplete', 5, 3);
         ";
 
 
         $sqlCode['checkPlayerExist'] = "SELECT * FROM player where registrationOrder=$this->registrationOrder;";
+
+
 
         $sqlCode['register']="INSERT INTO player(fName, lName, userName, registrationTime) 
         VALUES($this->firstname, $this->lastname, $this->username, date());";
