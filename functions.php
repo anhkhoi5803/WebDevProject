@@ -107,4 +107,12 @@ function validateNoError(){
 
 // ************************* Add below other functions ****************************************
 
+function validatePasswordModify(){
+    
+    if(empty($username_err) && empty($password_err) && empty($confirm_password_err))
+        return true;
+    else
+        return false;
+}
+
 ?>

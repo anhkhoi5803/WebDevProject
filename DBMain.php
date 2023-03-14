@@ -12,15 +12,12 @@ class ManipulateDB
     protected $sqlExec, $lastErrMsg;
 
     //Declare the method constructor
-    public function __construct()
-    {
-
+    public function __construct(){
 
     }
 
     //Declare the method to save the messages
-    protected function messages()
-    {
+    protected function messages(){
         //Error messages 
         $m['dbms'] = "<p>Connection to MySQL failed!<br/>$this->lastErrMsg</p>";
         $m['db'] = "<p>Connection to the DB failed!<br/>$this->lastErrMsg</p>";
@@ -38,8 +35,7 @@ class ManipulateDB
     }
 
     //Declare the method to save the SQL Code to be executed
-    protected function sqlCode()
-    {
+    protected function sqlCode(){
         //Create queries
         $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS kidsGames;";
 
