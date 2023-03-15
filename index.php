@@ -20,6 +20,7 @@
         <?php
         $db = new ManipulateDB();
 
+        //$db->connectToDB();
         $db->createDBandTB();
         ?>
     </div>
