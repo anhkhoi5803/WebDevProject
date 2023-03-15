@@ -2,7 +2,7 @@
 <?php
 
 //require_once "functions.php";
-require_once "process.php";
+require_once "passwordModPost.php";
 ?>
 
 <!-- -->

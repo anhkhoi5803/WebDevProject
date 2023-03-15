@@ -37,7 +37,7 @@ class ManipulateDB
     //Declare the method to save the SQL Code to be executed
     protected function sqlCode(){
         //Create queries
-        $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS kidsGames;";
+        $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS DBName;";
 
         $sqlCode['creatTabs'] = 
         "CREATE TABLE player( 
@@ -137,6 +137,39 @@ class ManipulateDB
         //Close automatically the connection from MySQL when it is opened at the end          
         if ($this->connection == TRUE) {
             $this->connection->close();
+        }
+    }
+
+    public function createDBandTB(){
+        $this->connection = $this->connectToDB();
+
+        if($this->connection === FALSE){
+            die($this->messages()['error']['dbms']);
+        }
+
+        $check = $this->executeSql($this->sqlCode()['creatDb']);
+        $err = $this->messages()['error']['creatDb'];
+        $find = 'database exists';
+
+
+        if (($check === FALSE) || ($check === TRUE && strpos($err, $find) === FALSE)){
+            echo $this->messages()['link']['tryAgain'];
+            die($this->messages()['error']['creatDb']);
+        }
+
+
+        if($this->connectToDB() ===FALSE){
+            echo $this->messages()['link']['tryAgain'];
+            die($this->messages()['error']['DB']);
+        }
+
+        $check = $this->executeSql($this->sqlCode()['creatTab']);
+        $err = $this->messages()['error']['creatTab'];
+        $find = 'already exists';
+
+        if (($check === FALSE && strpos($err, $find) === FALSE)) {
+            echo $this->messages()['link']['tryAgain'];
+            die($this->messages()['error']['creatTab']);
         }
     }
 }
