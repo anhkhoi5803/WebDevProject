@@ -34,7 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     // checking if the connection is available
     if ($connection == TRUE){
         // if(empty($username_err) && empty($password_err)){
-        if(validateNoError()){
+        if(!validateNoError()){
     
             $sqlCommand = "SELECT id, userName, passCode FROM player JOIN authenticator ON player.registrationOrder = authenticator.registrationOrder WHERE username = '$username'" ;
 
