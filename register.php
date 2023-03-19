@@ -9,8 +9,9 @@ Web Server Project - Registration Form
 
 <?php
 
-require_once "process.php";
+
 require_once "functions.php";
+require_once "registerController.php";
 
 ?>
 
@@ -32,7 +33,7 @@ require_once "functions.php";
         <h2>Sign Up</h2>
         <p>Please fill this form to create an account.</p>
         
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post"; >
 
             <div class="form-group">
                 <label>Username</label>

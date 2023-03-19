@@ -89,6 +89,8 @@ class ManipulateDB
         return $sqlCode;
     }
 
+    
+
     //Declare the method to connect to the DBMS
     protected function connectToDBMS()
     {

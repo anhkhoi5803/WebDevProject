@@ -35,10 +35,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $errorValidation = errorValidation();
 
 
-    $sql1 = "INSERT INTO player (fName, lName, userName) VALUES ('$firstname', '$lastname', '$username')";    
+    $sql1 = "INSERT INTO player (fName, lName, userName) VALUES ('$firstname', '$lastname', '$username')";
+    //before select registrationOrder    
     $sql2 = "INSERT INTO authenticator (passCode, registrationOrder) VALUES ('$password', 'registrationOrder')";
     $sql = $sql1 . ";" . $sql2;
 
+  
     // Check conection
     if($link === false){
         die("ERROR: No se pudo conectar. " . mysqli_connect_error());
@@ -53,7 +55,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
         // Close connection
         mysqli_close($link);
-    }     
+    } 
+    
+ 
     
 }
 
