@@ -2,111 +2,101 @@
 <!-- 
 Ronald Mercado H.
 Web Server Applications
-11 March 2023
+21 March 2023
 LaSalle College
 Web Server Project - Registration Form - Process
 -->
 
 <?php
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Include config and functions files
+require_once ("functions.php");
+require_once ("DBMainV3.php");
 
-require_once "functions.php";
-require_once "ConnectionDB.php";
-
-class Register {
-    //Attributes
-    private $fName;
-    private $lName;
-    private $userName;
-    private $password;
-    //private $registrationOrder;
-    private $db;
-
-    // Constructor
-    public function __construct($fName, $lName, $userName, $password) {
-        $this->fName = $fName;
-        $this->lName = $lName;
-        $this->userName = $userName;
+class Register extends ManipulateDB {
+ 
+      // Constructor     
+      public function __construct($fName, $lName, $userName, $password) {
+        parent::__construct();
+        $this->firstname = $fName;
+        $this->lastname = $lName;
+        $this->username = $userName;            
         $this->password = $password;
-        //$this->registrationOrder = $registrationOrder;
-        $this->db = new ManipulateDB();
-    }
+    }       
 
-    //Getter - Setters
-    public function getFName() {
-        return $this->fName;
-    }
-    public function setFName($fName) {
-        $this->fName = $fName;
-    }
-    public function getLName() {
-        return $this->lName;
-    }
-    public function setLName($lName) {
-        $this->lName = $lName;
-    }
-    public function getUserName() {
-        return $this->userName;
-    }
-    public function setUserName($userName) {
-        $this->userName = $userName;
-    }
-    public function getPassword() {
-        return $this->password;
-    }
-    public function setPassword($password) {
-        $this->password = $password;
-    }
-    public function getRegistrationOrder() {
-        return $this->registrationOrder;
-    }
-    public function setRegistrationOrder($registrationOrder) {
-        $this->registrationOrder = $registrationOrder;
-    }
+    public function registerPlayer(){
 
-    // Register a new player
-    public function registerPlayer() {
-        
-        $sql1 = "INSERT INTO player (fName, lName, userName) VALUES ('$this->fName', '$this->lName', '$this->userName')";
-        
-        
-        $sql2 = "SELECT registrationOrder FROM player WHERE userName = ?";
-        
-        
+        if($this->connectToDBMS() === TRUE){
+            if ($this->connectToDB() === TRUE){
+                
+                if ($this->executeSql($this->sqlCode()['userNameExist'])){
+                    
+                    if($this->sqlExec !== null && $this->sqlExec->num_rows > 0){
+                        
+                        $_SESSION['mensaje'] = "Player already exist, try another username";
+                    
+                    } else{
+                        $stmt = $this->connection->prepare($this->sqlCode()['register']);
+                        if ($stmt) {
+                        // Link placeholder values ​​to actual values
+                        $stmt->bind_param("sss", $this->firstname, $this->lastname, $this->username);
+                        $stmt->execute(); 
+                        $result = $stmt->get_result();
+                        $stmt->close();
+                    } else {                        
+                        $this->lastErrMsg = $this->connection->error;
+                        return FALSE;
+                    }
 
+                    $this->registrationOrder = mysqli_insert_id($this->connection);
+                    $stmt2 = $this->connection->prepare($this->sqlCode()['insertPassword']);
 
-        $sql3 = "INSERT INTO authenticator (passCode, registrationOrder ) VALUES ('$this->password', '$registrationOrder')";
-        
-        $sql = $sql1 . ";" . $sql2 . ";" . $sql3;
+                    if ($stmt2) {                        
+                        $stmt2->bind_param("ss", $this->password, $this->registrationOrder);
+                        $stmt2->execute();
+                        $result = $stmt2->get_result();
+                        $stmt2->close();
+                    } else {
+                        $this->lastErrMsg = $this->connection->error;
+                        return FALSE;
+                    }
 
-        if (mysqli_multi_query($this->db->getConnection(), $sql))
-        {
-            echo "Records inserted successfully.";
-        } else {
-            echo "Error: " . mysqli_error($this->db->getConnection());
+                    $_SESSION['mensaje'] = "Player sussccesfuly inserted";
+                }  
+                    
+                }else{  
+                    die($this->messages()['link']['tryAgain']);
+                    $_SESSION['mensaje'] = "there was an error, try again";                    
+                }
+            }else{
+                
+                die($this->messages()['link']['tryAgain']);
+                $_SESSION['mensaje'] = "there was an error, try again";   
+            }
+        }else{
+            die($this->messages()['link']['tryAgain']);
+            $_SESSION['mensaje'] = "there was an error, try again";   
         }
     }
 }
 
-
+// Proccess components
 $username = $password = $confirm_password = $firstname = $lastname =  "";
 
-//if(isset($_POST['send'])){
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // validations
-    $username = usernameValidation($_POST['username']);   
+    $userName = usernameValidation($_POST['username']);   
     $password = passwordValidation($_POST['password']);    
     $confirm_password = confirmPasswordValidation($_POST['password'], $_POST['confirm_password']);    
     $firstname = firstnameValidation($_POST['firstname']);    
     $lastname = lastnameValidation($_POST['lastname']);
     $errorValidation = errorValidation();
-
-    // Create a new instance of the DatabaseManager class 
-    $newPlayer = new Register($firstname, $lastname, $username, $password, 1 );
-    // Insert player data into the database
+    // new instance
+    $newPlayer = new Register($firstname, $lastname, $userName, $password);
     $newPlayer->registerPlayer();
-    
 }
-
 ?>
