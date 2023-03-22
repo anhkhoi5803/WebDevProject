@@ -1,6 +1,5 @@
 <?php
 
-
 define('HOST','localhost');
 define('USER','root');
 define('PASS','');
@@ -47,6 +46,83 @@ class ManipulateDB
     //Declare the method to save the SQL Code to be executed
     //protected function sqlCode(){
     protected function sqlCode(){
+        //Create queries
+
+        //$name = DBNAME;
+
+        $sqlCode['creatDb'] = "CREATE DATABASE IF NOT EXISTS " . DBNAME;
+
+        $sqlCode['creatTabs'] = 
+        "CREATE TABLE player( 
+            fName VARCHAR(50) NOT NULL, 
+            lName VARCHAR(50) NOT NULL, 
+            userName VARCHAR(20) NOT NULL UNIQUE,
+            registrationTime DATETIME NOT NULL,
+            id VARCHAR(200) GENERATED ALWAYS AS (CONCAT(UPPER(LEFT(fName,2)),UPPER(LEFT(lName,2)),UPPER(LEFT(userName,3)),CAST(registrationTime AS SIGNED))),
+            registrationOrder INTEGER AUTO_INCREMENT,
+            PRIMARY KEY (registrationOrder)
+        )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+        
+        CREATE TABLE authenticator(   
+            passCode VARCHAR(255) NOT NULL,
+            registrationOrder INTEGER, 
+            FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
+        )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+        
+        CREATE TABLE score( 
+            scoreTime DATETIME NOT NULL, 
+            result ENUM('success', 'failure', 'incomplete'),
+            livesUsed INTEGER NOT NULL,
+            registrationOrder INTEGER, 
+            FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
+        )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+        
+        CREATE VIEW history AS
+            SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
+            FROM player p, score s
+            WHERE p.registrationOrder = s.registrationOrder;
+        ";
+
+        $sqlCode['selectTab'] = "SELECT * FROM player;";
+
+        $sqlCode['descTab'] = "DESC player;";
+
+        $sqlCode['insertMockDataToTABs']=
+        "INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES('Patrick','Saint-Louis', 'sonic12345', now()); 
+        INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES('Marie','Jourdain', 'asterix2023', now());
+        INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES('Jonathan','David', 'pokemon527', now());
+        INSERT INTO player(fName, lName, userName, registrationTime)
+        VALUES('Thiago','Souza', 'tss12345', now());
+
+        INSERT INTO authenticator(passCode, registrationOrder)
+        VALUES('\$2y\$10\$fxMTc4KD4mZlj03wc4grTuVLssP0ZKxeqfcfvxVx2xnrrKF.CKsk.', 1);
+
+        INSERT INTO authenticator(passCode, registrationOrder)
+        VALUES('\$2y\$10\$AH/612QosAUyKIy5s4lEBuGdNAhnw.PbHYfIuLNK2aHQXWRMIF6fi', 2);
+
+        INSERT INTO authenticator(passCode, registrationOrder)
+        VALUES('\$2y\$10\$rSNEZ5wd8YyRRlNCmwfb2uUvkffrAMdmLkcm5s.b7WAgiGy8UoA1i', 3);
+        INSERT INTO authenticator(passCode, registrationOrder)
+        VALUES('\$2y\$10$6G0dZjvsyRQ6sB99NWs7u.ZGFY9eMaI2JM62qFtHr3n28MTRKhc5K', 4);
+
+        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        VALUES(now(), 'success', 4, 1);
+
+        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        VALUES(now(), 'failure', 6, 2);
+
+        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        VALUES(now(), 'incomplete', 5, 3);
+
+        INSERT INTO score(scoreTime, result , livesUsed, registrationOrder)
+        VALUES(now(), 'success', 2, 4);
+        
+        ";
+
+        //$sqlCode['checkPlayerExist'] = "SELECT * FROM player where registrationOrder=$this->registrationOrder;";
 
         $sqlCode['checkPlayerExist'] = "SELECT id, userName, passCode FROM player JOIN authenticator ON player.registrationOrder = authenticator.registrationOrder WHERE username = '$this->username';"; 
         //$sqlCode['checkPlayerExist'] = "SELECT id, userName, passCode FROM player JOIN authenticator ON player.registrationOrder = authenticator.registrationOrder WHERE username = 'tss12345';"; 
@@ -63,7 +139,6 @@ class ManipulateDB
         
         //Return an array of queries
         return $sqlCode;
-
     }
 
     //Declare the method to connect to the DBMS
@@ -98,6 +173,7 @@ class ManipulateDB
     protected function executeSql($code)
     {
         //Execute the query
+
         $invokeQuery = $this->connection->query($code);
         //If data insertion to the table failed save the system error message  
         if ($invokeQuery === FALSE) {
@@ -107,10 +183,11 @@ class ManipulateDB
             $this->sqlExec = $invokeQuery;
         return TRUE;
     }
-    
+
     protected function executeSqlMultiQuery($code)
     {
         //Execute the query
+
         $invokeQuery = $this->connection->multi_query($code);
         //If data insertion to the table failed save the system error message  
         if ($invokeQuery === FALSE) {
@@ -131,8 +208,255 @@ class ManipulateDB
         }
     }
 
-    
+    public function createDBandTAB()
+    {
+        //1-Connect to the DBMS
+        if ($this->connectToDBMS() === TRUE) {
+            //2-Create the DB if it does not exist yet
+            $check = $this->executeSql($this->sqlCode()['creatDb']);
+            $err = $this->messages()['error']['creatDb'];
+            $find = 'database exists';
+            if (($check === TRUE) || ($check === FALSE && strpos($err, $find) !== FALSE)) {
+                //3-Connect to the DB
+                if ($this->connectToDB() === TRUE) {
+                    //4-Create the Table if it does not exist yet
+                    //echo $this->sqlCode()['creatTabs'];
+                    $check = $this->executeSqlMultiQuery($this->sqlCode()['creatTabs']);
+                    $err = $this->messages()['error']['creatTab'];
+                    $find = 'already exists';
+                    //Cannot Create the Table even if it does not exist yet
+                    if (($check === FALSE && strpos($err, $find) === FALSE)) {
+                        echo $this->messages()['link']['tryAgain'];
+                        die($this->messages()['error']['creatTab']);
+                    }
+                }
+                //Cannot Connect to the DB
+                else {
+                    echo $this->messages()['link']['tryAgain'];
+                    die($this->messages()['error']['db']);
+                }
+            }
+            //Cannot Create the DB even if it does not exist yet 
+            else {
+                echo $this->messages()['link']['tryAgain'];
+                die($this->messages()['error']['creatDb']);
+            }
+        }
+        //Cannot Connect to the DBMS
+        else {
+            die($this->messages()['error']['dbms']);
+        }
+    }
 
-   
+    public function insertMockDataToTABs()
+    {
+        //1-Connect to the DBMS
+        if ($this->connectToDBMS() === TRUE) {
+                //2-Connect to the DB
+                if ($this->connectToDB() === TRUE) {
+                    //3-Check that the Table exists 
+                    if ($this->executeSql($this->sqlCode()['descTab']) === TRUE) {
+                        //4-Insert data to the Table
+                        //Cannot Insert data to the Table
+                        if ($this->executeSqlMultiQuery($this->sqlCode()['insertMockDataToTABs']) === FALSE) {
+                            echo $this->messages()['link']['tryAgain'];
+                            die($this->messages()['error']['insertTab']);
+                        }
+                    }
+                    //Cannot Check that the Table exists
+                    else{
+                        echo $this->messages()['link']['tryAgain'];
+                        die($this->messages()['error']['desTab']);
+                    }
+                }
+                //Cannot Connect to the DB
+                else {
+                    echo $this->messages()['link']['tryAgain'];
+                    die($this->messages()['error']['insertTab']);
+                }        
+        }
+        //Cannot Connect to the DBMS
+        else {
+            die($this->messages()['error']['dbms']);
+        }
+    }
+
+    //Declare the method to display selected data 
+    public function displaySelectData(){
+        //Calculate the number of rows available
+        $number_of_rows = $this->sqlExec->num_rows;
+        //Use a loop to display the rows one by one
+        echo "<table>";
+        echo "<tr><td>fName</td><td>lName</td><td>userName</td><td>registrationTime</td><td>id</td><td>registrationOrder</td></tr>";
+        for ($j = 0; $j < $number_of_rows; ++$j) {
+            echo "<tr>";
+            //Assign the records of each row to an associative array
+            $each_row = $this->sqlExec->fetch_array(MYSQLI_ASSOC);
+            //Display each the record corresponding to each column
+            foreach ($each_row as $item)
+                echo "<td>" . $item . "</td>";
+            echo "</tr>";
+        }   
+        echo "</table>";
+    }
+
+    public function displaySelectDataFindUser(){
+        //Calculate the number of rows available
+        $number_of_rows = $this->sqlExec->num_rows;
+        //Use a loop to display the rows one by one
+        echo "<table>";
+        echo "<tr><td>id</td><td>userName</td><td>passCode</td></tr>";
+        for ($j = 0; $j < $number_of_rows; ++$j) {
+            echo "<tr>";
+            //Assign the records of each row to an associative array
+            $each_row = $this->sqlExec->fetch_array(MYSQLI_ASSOC);
+            //Display each the record corresponding to each column
+            foreach ($each_row as $item)
+                echo "<td>" . $item . "</td>";
+            echo "</tr>";
+        }   
+        echo "</table>";
+    }
+
+    public function selectFromTAB()
+    {
+        //1-Connect to the DBMS
+        if ($this->connectToDBMS() === TRUE) {
+                //2-Connect to the DB
+                if ($this->connectToDB() === TRUE) {
+                    //3-Check that the Table exists 
+                    if ($this->executeSql($this->sqlCode()['descTab']) === TRUE) {
+                        //4-Select data From the Table
+                        if ($this->executeSql($this->sqlCode()['selectTab']) === TRUE) {
+                            $this->displaySelectData();
+                        }
+                        //Cannot Select data From the Table
+                        else{
+                            echo $this->messages()['link']['tryAgain'];
+                            die($this->messages()['error']['selectTab']);
+                        }
+                    }
+                    //Cannot Check that the Table exists
+                    else{
+                        echo $this->messages()['link']['tryAgain'];
+                        die($this->messages()['error']['desTab']);
+                    }
+                }
+                //Cannot Connect to the DB
+                else {
+                    echo $this->messages()['link']['tryAgain'];
+                    die($this->messages()['error']['insertTab']);
+                }        
+        }
+        //Cannot Connect to the DBMS
+        else {
+            die($this->messages()['error']['dbms']);
+        }
+    }
+
+    public function selectFromTABPlayerAuthenByUsername()
+    {
+        //1-Connect to the DBMS
+        if ($this->connectToDBMS() === TRUE) {
+                //2-Connect to the DB
+                if ($this->connectToDB() === TRUE) {
+                    //3-Check that the Table exists 
+                    if ($this->executeSql($this->sqlCode()['descTab']) === TRUE) {
+                        //4-Select data From the Table
+                        if ($this->executeSql($this->sqlCode()['checkPlayerExist']) === TRUE) {
+                            $this->displaySelectDataFindUser();
+                        }
+                        //Cannot Select data From the Table
+                        else{
+                            echo $this->messages()['link']['tryAgain'];
+                            die($this->messages()['error']['selectTab']);
+                        }
+                    }
+                    //Cannot Check that the Table exists
+                    else{
+                        echo $this->messages()['link']['tryAgain'];
+                        die($this->messages()['error']['desTab']);
+                    }
+                }
+                //Cannot Connect to the DB
+                else {
+                    echo $this->messages()['link']['tryAgain'];
+                    die($this->messages()['error']['insertTab']);
+                }        
+        }
+        //Cannot Connect to the DBMS
+        else {
+            die($this->messages()['error']['dbms']);
+        }
+    }
+
+    public function loginPlayer()
+    {
+        //1-Connect to the DBMS
+        if ($this->connectToDBMS() === TRUE) {
+
+                //2-Connect to the DB
+                if ($this->connectToDB() === TRUE) {
+                    
+                    if(validateNoError()){
+                            
+                        if ($this->executeSql($this->sqlCode()['checkPlayerExist']) === TRUE) {
+                            
+
+                            $number_of_rows = $this->sqlExec->num_rows;
+
+                            if($number_of_rows == 1){
+                                $each_row = $this->sqlExec->fetch_array(MYSQLI_ASSOC);
+                                
+                                ///way to print every
+                                // foreach ($each_row as $item){
+                                //     echo "<p>" . $item . "</p>";
+                                // }
+
+                                $id = $each_row['id'];
+                                $username = $each_row['userName'];
+                                $hashed_password = $each_row['passCode'];
+
+                                if(password_verify($this->password, $hashed_password)){
+
+                                    // After confirming the password, we start a new session
+                                    session_start();
+                                    
+                                    // Creatting $_SESSION variables
+                                    $_SESSION["loggedin"] = true;
+                                    $_SESSION["id"] = $id;
+                                    $_SESSION["username"] = $username;
+                                                                
+                                    
+                                    // Redirect user to welcome page
+                                    header("location: level1.php");
+                                }
+                                else{
+                                    $this->login_err = "Invalid username or password.";
+                                }
+
+
+                            } else{
+                                $this->login_err = "Invalid username or password.";
+                            }
+                        }
+                        //Cannot Select data From the Table
+                        else{
+                            $this->login_err = " Oops! Something went wrong. Please try again later.";
+                        }
+                    }
+                    // $username_err or $ password_err already filled
+                    
+                }
+                //Cannot Connect to the DB
+                else {
+                    die($this->messages()['error']['db']);
+                }        
+        }
+        //Cannot Connect to the DBMS
+        else {
+            die($this->messages()['error']['dbms']);
+        }
+    }
 
 }
