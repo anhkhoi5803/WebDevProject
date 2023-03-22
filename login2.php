@@ -30,8 +30,8 @@ require_once "loginController2.php";
         <p>Please fill in your credentials to login.</p>
 
         <?php 
-        if(!empty($dbMain2->login_err)){
-            echo '<div class="alert alert-danger">' . $dbMain2->login_err . '</div>';
+        if(!empty($dbMain->login_err)){
+            echo '<div class="alert alert-danger">' . $dbMain->login_err . '</div>';
         }        
         ?>
 
@@ -39,7 +39,7 @@ require_once "loginController2.php";
         <form name="sign-in" action="login2.php" method="post">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $dbMain2->username; ?>" placeholder="<?php echo $username_placeholder; ?>">
+                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $dbMain->username; ?>" placeholder="<?php echo $username_placeholder; ?>">
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
             </div>    
             <div class="form-group">
@@ -52,7 +52,7 @@ require_once "loginController2.php";
                 <input type="submit" class="btn btn-primary" value="Sign-Up" name="sign-up" onclick="sign-in.action='register.php'" >
             </div>
             <?php 
-            if(!empty($dbMain2->login_err)){
+            if(!empty($dbMain->login_err)){
                 echo '<p>Forgotten? Please, <a href="passwordModification.php">change your password</a>.</p>';
             }        
             ?>

@@ -9,7 +9,8 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     exit;
 }
 
-require_once "DBMain2.php";
+// require_once "DBMain2.php";
+require_once "DBMainV3.php";
 //require_once "config.php";
 require_once "functions.php";
 
@@ -18,10 +19,10 @@ $password_placeholder = "Enter your password";
 // $username = "";
 // $password = "";
 //$login_err = "";
-$dbMain2 = new ManipulateDB();
-$dbMain2->username = "";
-$dbMain2->password = "";
-$dbMain2->login_err = "";
+$dbMain = new ManipulateDB();
+$dbMain->username = "";
+$dbMain->password = "";
+$dbMain->login_err = "";
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -35,14 +36,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // $password = passwordValidation(trim($_POST["password"]));
 
-    $dbMain2->username = usernameValidation(strtolower(trim($_POST["username"])));
+    $dbMain->username = usernameValidation(strtolower(trim($_POST["username"])));
 
-    $dbMain2->password = passwordValidation(trim($_POST["password"]));
+    $dbMain->password = passwordValidation(trim($_POST["password"]));
 
-    $dbMain2->loginPlayer();
+    $dbMain->loginPlayer();
 
-    //echo "<p>".$dbMain2->sqlExec."</p>";
-    //echo "<p>".$dbMain2->login_err."</p>";
+    //echo "<p>".$dbMain->sqlExec."</p>";
+    //echo "<p>".$dbMain->login_err."</p>";
 
 
 
