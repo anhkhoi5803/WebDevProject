@@ -35,7 +35,8 @@ class ManipulateDB
         $m['desTab'] = "<p>Table structure description failed!<br/>$this->lastErrMsg</p>";
         // Added
         $m['userExist'] = "<p>User name already exist<br/>$this->lastErrMsg</p>";
-
+        $m['userNotExist'] = "<p>User name NOT exist<br/>$this->lastErrMsg</p>";
+        
         //Try again messages
         $b['tryAgain'] = "<a href=\"index.php\"><input type=\"submit\" value=\"Try again!\"></a>";
         //Group messages by category 
@@ -464,6 +465,58 @@ class ManipulateDB
         else {
             die($this->messages()['error']['dbms']);
         }
+    }
+
+    public function changePassword(){
+        if ($this->connectToDBMS() === TRUE) {
+
+            //2-Connect to the DB
+            if ($this->connectToDB() === TRUE) {
+                
+                if(validateNoError()){
+                        
+                    if ($this->executeSql($this->sqlCode()['userNameExist']) === TRUE) {
+                        
+
+                        $number_of_rows = $this->sqlExec->num_rows;
+
+                        if($number_of_rows == 1){
+                            $each_row = $this->sqlExec->fetch_array(MYSQLI_ASSOC);
+
+                            $this->registrationOrder = $each_row['registrationOrder'];
+
+                            if ($this->executeSql($this->sqlCode()['changePassword']) === false){
+                                echo $this->messages()['link']['tryAgain'];
+                                die($this->messages()['error']['insertTab']);
+                            }
+                            else{
+                                echo "Redirecting to login page";
+                                header("Refresh:10 ;location: login.php");
+                            }
+
+
+                        } else{
+                            die($this->messages()['error']['userNotExist']);
+                        }
+                    }
+                    //Cannot Select data From the Table
+                    else{
+                        die($this->messages()['error']['userNotExist']);
+                    }
+                }
+                //if error - already shown
+                
+                
+            }
+            //Cannot Connect to the DB
+            else {
+                die($this->messages()['error']['db']);
+            }        
+    }
+    //Cannot Connect to the DBMS
+    else {
+        die($this->messages()['error']['dbms']);
+    }
     }
 
 }
