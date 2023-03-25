@@ -1,18 +1,18 @@
 <?php
 
-//session_start();
-
-//$_SESSION["loggedin"] = false;
-
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: level1.php");
-    exit;
-}
-
 // require_once "DBMain2.php";
 require_once "DBMainV3.php";
 //require_once "config.php";
 require_once "functions.php";
+
+session_start();
+
+//$_SESSION["loggedin"] = false;
+
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+    header("location: game1.php");
+    exit;
+}
 
 $username_placeholder = "Enter your username";
 $password_placeholder = "Enter your password";

@@ -8,7 +8,7 @@ define('DBNAME','kidsGames');
 class ManipulateDB
 {   
     //Declare the properties
-    public $firstname, $lastname, $username, $registrationOrder,$newPassword, $password, $login_err;
+    public $firstname, $lastname, $username, $registrationOrder,$newPassword, $password, $login_err, $answer, $answer_err, $scoreTime, $result, $livesUsed;
     
     // Changed to protected to get acces from register class >> before was private $connection;
     protected $connection; 
@@ -36,6 +36,7 @@ class ManipulateDB
         // Added
         $m['userExist'] = "<p>User name already exist<br/>$this->lastErrMsg</p>";
         $m['userNotExist'] = "<p>User name NOT exist<br/>$this->lastErrMsg</p>";
+        $m['invalidUsernamePass'] = "Invalid username or password.";
         
         //Try again messages
         $b['tryAgain'] = "<a href=\"index.php\"><input type=\"submit\" value=\"Try again!\"></a>";
@@ -119,7 +120,7 @@ class ManipulateDB
 
         //$sqlCode['checkPlayerExist'] = "SELECT * FROM player where registrationOrder=$this->registrationOrder;";
         
-        $sqlCode['checkPlayerExist'] = "SELECT id, userName, passCode FROM player JOIN authenticator ON player.registrationOrder = authenticator.registrationOrder WHERE username = '$this->username';"; 
+        $sqlCode['checkPlayerCredentials'] = "SELECT id, userName, passCode, fName, lName, player.registrationOrder FROM player JOIN authenticator ON player.registrationOrder = authenticator.registrationOrder WHERE username = '$this->username';"; 
         //$sqlCode['checkPlayerExist'] = "SELECT id, userName, passCode FROM player JOIN authenticator ON player.registrationOrder = authenticator.registrationOrder WHERE username = 'tss12345';"; 
         
         // added (ronald)
@@ -408,8 +409,7 @@ class ManipulateDB
                     
                     if(validateNoError()){
                             
-                        if ($this->executeSql($this->sqlCode()['checkPlayerExist']) === TRUE) {
-                            
+                        if ($this->executeSql($this->sqlCode()['checkPlayerCredentials']) === TRUE) {
 
                             $number_of_rows = $this->sqlExec->num_rows;
 
@@ -424,6 +424,9 @@ class ManipulateDB
                                 $id = $each_row['id'];
                                 $username = $each_row['userName'];
                                 $hashed_password = $each_row['passCode'];
+                                $fName = $each_row['fName'];
+                                $lName = $each_row['lName'];
+                                $registrationOrder = $each_row['registrationOrder'];
 
                                 if(password_verify($this->password, $hashed_password)){
 
@@ -431,26 +434,33 @@ class ManipulateDB
                                     session_start();
                                     
                                     // Creatting $_SESSION variables
-                                    $_SESSION["loggedin"] = true;
-                                    $_SESSION["id"] = $id;
-                                    $_SESSION["username"] = $username;
+                                    $_SESSION['loggedin'] = true;
+                                    $_SESSION['id'] = $id;
+                                    $_SESSION['username'] = $username;
+                                    $_SESSION['fName'] = $fName;
+                                    $_SESSION['lName'] = $lName;
+                                    $_SESSION['registrationOrder'] = $registrationOrder;
+                                    $_SESSION['livesUsed'] = 0;
+                                    $_SESSION['startTime'] = date('Y-m-d H:i:s');
                                                                 
                                     
                                     // Redirect user to welcome page
                                     header("location: level1.php");
                                 }
                                 else{
-                                    $this->login_err = "Invalid username or password.";
+                                    // $this->login_err = "Invalid username or password.";
+                                    $this->login_err = $this->messages()['error']['invalidUsernamePass'];
                                 }
 
 
                             } else{
-                                $this->login_err = "Invalid username or password.";
+                                //$this->login_err = "Invalid username or password.";
+                                $this->login_err = $this->messages()['error']['invalidUsernamePass'];
                             }
                         }
                         //Cannot Select data From the Table
                         else{
-                            $this->login_err = " Oops! Something went wrong. Please try again later.";
+                            $this->login_err = "Oops! Something went wrong. Please try again later.";
                         }
                     }
                     // $username_err or $ password_err already filled
