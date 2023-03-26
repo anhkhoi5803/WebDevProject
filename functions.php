@@ -292,7 +292,7 @@ function validateEntryAnswer(){
     return true;
 }
 
-function compareArrayNumbersAsc() {
+function compareArrayNumbersLetters() {
 
     global $gameLevel;
     global $gameNumLetterArrSorted;
@@ -341,7 +341,7 @@ function validateCorrectAnswer() {
 
             $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
 
-            compareArrayNumbersAsc();
+            compareArrayNumbersLetters();
 
             break;
         case 4:
@@ -351,7 +351,7 @@ function validateCorrectAnswer() {
 
             $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
 
-            compareArrayNumbersDesc();
+            compareArrayNumbersLetters();
 
             break;
         case 5:

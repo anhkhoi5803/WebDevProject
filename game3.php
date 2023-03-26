@@ -26,7 +26,7 @@ require_once "game3Controller.php";
         require_once "navBar.php";
     ?>
     <div class="wrapper p-5">
-        <h2>Game Level 3: Order numbers in ascending order</h2>
+        <h2>Game Level 3: <?php echo $instructions; ?></h2>
         <p>Please <?php echo $instructions; ?> (from 0 to 100).</p>
         <p>** put ',' between the numbers (Example: 0,1,2,3,4,5).</p>
 
