@@ -1,5 +1,6 @@
 <?php
 
+//require_once "DBMain.php";
 require_once "DBMainV3.php";
 require_once "functions.php";
 
@@ -7,7 +8,7 @@ session_start();
 
 if(!isset($_SESSION['loggedin']) && !$_SESSION['loggedin'] === true) {
     session_destroy();
-    header("location: login2.php");
+    header("location: login.php");
     exit;
 }
 
@@ -33,7 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if( isset($_POST['sign-out']) ) {
         session_destroy();
-        header("location: login2.php");
+        header("location: login.php");
         exit;
     }
 
@@ -53,7 +54,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $dbMain->insertScore();
         
         session_destroy();
-        header("location: login2.php");
+        header("location: login.php");
         exit;
     }
 
@@ -70,13 +71,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if(isset($_POST["home_page"])) {
         resetLivesAndDateTimeSession();
-        header("location: login2.php");
+        header("location: login.php");
         exit;
     }
 
     if($_SESSION['livesUsed'] > TOTAL_LIVES) {
         session_destroy();
-        header("location: login2.php");
+        header("location: login.php");
         exit;
     }
 
