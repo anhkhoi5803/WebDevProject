@@ -53,7 +53,7 @@ require_once "loginController2.php";
             </div>
             <?php 
             if(!empty($dbMain->login_err)){
-                echo '<p>Forgotten? Please, <a href="passwordModification.php">change your password</a>.</p>';
+                echo '<p>Forgotten? Please, <a href="passwordModifier.php">change your password</a>.</p>';
             }        
             ?>
         </form>
