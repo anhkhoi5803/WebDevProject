@@ -154,44 +154,16 @@ function generateArrayNumbers() {
 function generateArrayLetters() {
     $arrLetters = [];
 
-<<<<<<< HEAD
     for($i = 0 ; $i < TOTAL_GAME_NUM_CHAR_ARRAY ; $i++){
         
         do {
             $charAux = chr(rand(ASCII_A_LOWER,ASCII_Z_LOWER));
         } while(in_array($charAux, $arrLetters, TRUE));
-=======
-    // for($i = 0 ; $i < TOTAL_GAME_NUM_CHAR_ARRAY ; $i++){
-    //     $charAux;
-
-    //     do {
-    //         $charAux = chr(rand(97,101));
-    //     } while(in_array($charAux, $arrLetters, TRUE));
-
-    //     $arrLetters[$i] = $charAux;
-    // }
-
-    //$characters = 'abcdefghijklmnopqrstuvwxyz';
-    $chars = "abcdef";
-
-    for ($i = 0; $i < TOTAL_GAME_NUM_CHAR_ARRAY; $i++) {
-       
-        //$randomString .= $chars[$index];
-
-        $charAux;
-        do {
-             $index = rand(0, strlen(TOTAL_LETTERS) - 1);
-             $charAux = TOTAL_LETTERS[$index];
-         } while(in_array($charAux, $arrLetters, TRUE));
->>>>>>> b25c2552a8c56a559257e1d8b21c1e9204be30a8
-
          $arrLetters[$i] = $charAux;
     }
     return $arrLetters;
 }
-
 function getStringWithCommaFromArray($arrayNumLetter){
-
     $strResult = '';
     for($i = 0 ; $i < count($arrayNumLetter) ; $i++){
         if($i == (count($arrayNumLetter) - 1)){
@@ -200,18 +172,12 @@ function getStringWithCommaFromArray($arrayNumLetter){
         }
         $strResult = $strResult . $arrayNumLetter[$i] . ',';
     }
-
     return $strResult;
-
 }
-
-
 function generateNumbersLetters() {
-
     global $gameLevel;
     global $gameNumLetterArr;
     global $gameNumLetterString;
-
     switch ($gameLevel) {
         case 1:
         case 2:
@@ -233,7 +199,6 @@ function generateNumbersLetters() {
             break;
     }
 }
-
 function isAnswerArrayOfNumbers() {
     
     global $answerArr;
@@ -245,7 +210,6 @@ function isAnswerArrayOfNumbers() {
     }
     return true;
 }
-
 function isAnswerArrayOfLetters() {
     
     global $answerArr;
@@ -257,17 +221,14 @@ function isAnswerArrayOfLetters() {
     }
     return true;
 }
-
 function getStringNumbersOrLetters(){
     global $gameLevel;
-
     if($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) {
         return 'numbers';
     }else {
         return 'letters';
     }
 }
-
 function validateEntryAnswer(){
     
     global $answer_err;
@@ -275,20 +236,15 @@ function validateEntryAnswer(){
     global $answerArr;
     global $gameLevel;
     $numbersOrLetters = getStringNumbersOrLetters();
-
     $answer = strtolower($answer);
-
     if(empty($answer)){        
         $answer_err = "Please enter a valid answer!";
         return false;
     }
-
     if($answer[strlen($answer) - 1] == ','){
         $answer = substr($answer, 0, strlen($answer) - 1);
     }
-
     $answerArr = explode(',', $answer);
-
     if($gameLevel == 1 || $gameLevel == 2 || $gameLevel == 3 || $gameLevel == 4) {
         if(count($answerArr) != TOTAL_ANSWER_ARRAY_LEVEL_1_2_3_4){
             $answer_err = "Please enter " . TOTAL_ANSWER_ARRAY_LEVEL_1_2_3_4 . " " . $numbersOrLetters . " between ',' (comma)!";
@@ -300,7 +256,6 @@ function validateEntryAnswer(){
             return false;
         }
     }
-
     if($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) {
         if(!isAnswerArrayOfNumbers()){
             $answer_err = "Please enter only " . $numbersOrLetters . " between ',' (comma) !";
@@ -312,20 +267,15 @@ function validateEntryAnswer(){
             return false;
         }
     }
-
     return true;
 }
-
 function compareArrayNumbersLetters() {
-
     global $gameLevel;
     global $gameNumLetterArrSorted;
     global $answerArr;
     global $resultLevel;
     $numbersOrLetters = getStringNumbersOrLetters();
-
     $arrIntersec = array_intersect($gameNumLetterArrSorted, $answerArr);
-
     if(empty($arrIntersec)){
         $resultLevel = "Incorrect - All your " . $numbersOrLetters . " are different than ours";
     } else {
@@ -339,29 +289,22 @@ function compareArrayNumbersLetters() {
             $resultLevel = "Incorrect - Some of your " . $numbersOrLetters . " are different than ours";
         }
     }
-
 }
-
 function checkMinMaxNumber() {
-
     global $gameLevel;
     global $gameNumLetterArr;
     global $answerArr;
     global $resultLevel;
     $numbersOrLetters = getStringNumbersOrLetters();
-
     $arrIntersec = array_intersect($gameNumLetterArr, $answerArr);
-
     $gameArr =array();
     foreach($gameNumLetterArr as $n){
         $gameArr[] = intval($n);
     }
-
     $ansArr = array();
     foreach($answerArr as $n){
         $ansArr[] = intval($n);
     }
-
     var_dump($ansArr);
     var_dump($gameArr);
     if(empty($arrIntersec)){
@@ -377,10 +320,7 @@ function checkMinMaxNumber() {
             $resultLevel = "Incorrect - Some of your " . $numbersOrLetters . " are different than ours";
         }
     }
-
 }
-
-
 function checkFirstLastLetter(){
     global $gameLevel;
     global $gameNumLetterArr;
@@ -388,26 +328,19 @@ function checkFirstLastLetter(){
     global $answerArr;
     global $resultLevel;
     $numbersOrLetters = getStringNumbersOrLetters();
-
     $arrIntersec = array_intersect($gameNumLetterArrSorted, $answerArr);
-
     // $gameArr =sort($gameNumLetterArr);
     // // foreach($gameNumLetterArr as $n){
     // //     $gameArr[] = intval($n);
     // // }
-
     // $ansArr = $answerArr;
     // // foreach($answerArr as $n){
     // //     $ansArr[] = intval($n);
     // // }
-
     var_dump($gameNumLetterArrSorted);
     var_dump($answerArr);
-
     if(empty($arrIntersec)){
-
         $resultLevel = "Incorrect - All your " . $numbersOrLetters . " are different than ours";
-
     } else {
         if(count($arrIntersec) == TOTAL_ANSWER_ARRAY_LEVEL_5_6) {
             if($gameNumLetterArrSorted[0] == $answerArr[0]&& $gameNumLetterArrSorted[TOTAL_GAME_NUM_CHAR_ARRAY-1] === $answerArr[1]){
@@ -420,22 +353,14 @@ function checkFirstLastLetter(){
         }
     }
 }
-
 function validateCorrectAnswer() {
-
     global $gameLevel;
     global $gameNumLetterArr;
     global $gameNumLetterArrSorted;
     global $gameNumLetterStringSorted;
-
     $gameNumLetterArrSorted = $gameNumLetterArr;
-
     switch ($gameLevel) {
         case 1:
-<<<<<<< HEAD
-=======
-            // call here the function to validate the game1
->>>>>>> b25c2552a8c56a559257e1d8b21c1e9204be30a8
             sort($gameNumLetterArrSorted);
 
             $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
@@ -443,10 +368,6 @@ function validateCorrectAnswer() {
             compareArrayNumbersLetters();
             break;
         case 2:
-<<<<<<< HEAD
-=======
-            // call here the function to validate the game2
->>>>>>> b25c2552a8c56a559257e1d8b21c1e9204be30a8
             rsort($gameNumLetterArrSorted);
 
             $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
@@ -534,13 +455,16 @@ function getResultLevelMsg() {
     global $gameNumLetterStringSorted;
     global $answer;
     global $resultLevelMsg;
+    global $instructions;
+    $numbersOrLetters = getStringNumbersOrLetters();
 
-    $resultLevelMsg = "Game Numbers: " . $gameNumLetterStringSorted .
-    "<br/>Instructions: order these numbers in ascending order" .
-    "<br/>Your numbers: " . $answer .
+    $resultLevelMsg = "Game " . $numbersOrLetters . ": " . $gameNumLetterStringSorted .
+    "<br/>Instructions: " . ucfirst($instructions) .
+    "<br/>Your " . $numbersOrLetters . ": " . $answer .
     "<br/>Result: " . $resultLevel;
 
 }
+
 
 function resetLivesAndDateTimeSession(){
     session_start();
@@ -567,7 +491,7 @@ function setData($dbMain) {
 
 function session_dest(){
     session_destroy();
-    header("location: login2.php");
+    header("location: login.php");
     exit;
 }
 

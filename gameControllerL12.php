@@ -64,7 +64,7 @@
 
             if(validateEntryAnswer()) {
                 validateCorrectAnswer();
-                getResultLevelMsg2();
+                getResultLevelMsg();
 
                 if(strpos($resultLevelMsg, "Correct")){
                     $playerWon = true;
