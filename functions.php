@@ -156,7 +156,7 @@ function generateArrayLetters() {
         $charAux;
 
         do {
-            $charAux = char(rand(ASCII_A_LOWER,ASCII_Z_LOWER));
+            $charAux = chr(rand(ASCII_A_LOWER,ASCII_Z_LOWER));
         } while(in_array($charAux, $arrLetters, TRUE));
 
         $arrLetters[$i] = $charAux;
@@ -330,9 +330,19 @@ function validateCorrectAnswer() {
     switch ($gameLevel) {
         case 1:
             // call here the function to validate the game1
+            sort($gameNumLetterArrSorted);
+
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+            compareArrayNumbersLetters();
             break;
         case 2:
             // call here the function to validate the game2
+            rsort($gameNumLetterArrSorted);
+
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+            compareArrayNumbersLetters();
             break;
         case 3:
             // call here the function to validate the game3
@@ -405,9 +415,10 @@ function getResultLevelMsg() {
     global $gameNumLetterStringSorted;
     global $answer;
     global $resultLevelMsg;
+    $numbersOrLetters = getStringNumbersOrLetters();
 
-    $resultLevelMsg = "Game Numbers: " . $gameNumLetterStringSorted .
-    "<br/>Instructions: order these numbers in ascending order" .
+    $resultLevelMsg = "Game " . $numbersOrLetters . ": " . $gameNumLetterStringSorted .
+    "<br/>Instructions: " . $instructions .
     "<br/>Your numbers: " . $answer .
     "<br/>Result: " . $resultLevel;
 

@@ -80,7 +80,7 @@ class ManipulateDB
             FOREIGN KEY (registrationOrder) REFERENCES player(registrationOrder)
         )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
         
-        CREATE VIEW IF NOT EXISTS  VIEW history AS
+        CREATE VIEW history AS
             SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
             FROM player p, score s
             WHERE p.registrationOrder = s.registrationOrder;
