@@ -426,9 +426,19 @@ function validateCorrectAnswer() {
     switch ($gameLevel) {
         case 1:
             // call here the function to validate the game1
+            sort($gameNumLetterArrSorted);
+
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+            compareArrayNumbersLetters();
             break;
         case 2:
             // call here the function to validate the game2
+            rsort($gameNumLetterArrSorted);
+
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+            compareArrayNumbersLetters();
             break;
         case 3:
             // call here the function to validate the game3
@@ -511,10 +521,9 @@ function getResultLevelMsg() {
     global $gameNumLetterStringSorted;
     global $answer;
     global $resultLevelMsg;
-    global $instructions;
 
-    $resultLevelMsg = "Game " . ucfirst(getStringNumbersOrLetters()) ." : " . $gameNumLetterStringSorted .
-    "<br/>Instructions: " . $instructions .
+    $resultLevelMsg = "Game Numbers: " . $gameNumLetterStringSorted .
+    "<br/>Instructions: order these numbers in ascending order" .
     "<br/>Your numbers: " . $answer .
     "<br/>Result: " . $resultLevel;
 
