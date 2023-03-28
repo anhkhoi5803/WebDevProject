@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>  
   <head>
-    <title>HTML Embedded Form with echo and \</title>
+    <title>Level 6</title>
     <style>
       .form{color:blue;}
       .formhandling{color:red;}
@@ -13,114 +13,137 @@
     </style>
   </head>
   <body>
-    <?php					
-      echo "<h1>Enter minimum and maximum numbers</h1><BR>";
-      echo "<h3>Here are six different number find the minimum and maximum numbers in them</h3><br>";
-
-//       To add
-// 
-// 
-//       
-
-      //Form 
-      echo "<form id=\"form1\" method=\"post\" action=\"ex3\" >"; //Beginning form tag
-          // Form fields to input data
-          echo "<label>Enter the  minimum number</label>"; 
-          echo "<br />";
-
-          echo "<input id=\"inputRows\" type=\"text\" name=\"numOne\" required=\"required\">"; 
-          echo "<br />";
-          echo "<br />";
-
-          echo "<label>Enter the  minimum number</label>"; 
-          echo "<br />";
-          
-          echo "<input id=\"inputRows\" type=\"text\" name=\"userDataSet\" required=\"required\">"; 
-          echo "<br />";
-          echo "<br />";
-
-
-          // Submit button to send form data		
-          echo "<input id=\"submitbutton1\" type=\"submit\" name=\"send\" value=\"SEND IT\" />"; 
-          echo "<br />";
-
-          echo "<br />";
-
-      echo "</form>"; //Closing form tag
-      //Form Handling
-      //Go below only after a user pressed the input button name="send" 
-    if (isset($_POST['send'])) {
-
-        $one = $_POST['numOne'];
-        $two = $_POST['numTwo'];
-
-
-        getOutputs();
-
-     
-
-      
+    <?php		
+        if(session_status()=== PHP_SESSION_NONE){
+            // echo "Redirecting to login page";
+            header("Refresh:10 ;location: login.php");
+            
+        }
         
-    }
 
-    function getMessage(){
-      return array(
-        "negative"=>"One or both of the number you entered is negative",
-        "same"=>"The numbers you entered are the same",
-        "multi"=>" is multiple of:",
-        "gcd"=>"Their greatest divisor is ",
-        "lcm"=>"There least common multiple is "
-      );
-    }
-    
-    function getMultiple25($a){
-        if ($a % 2 == 0 && $a % 5 == 0)
-            return "2 and 5";
-        elseif ($a % 2 == 0)
-            return "2";
-        elseif($a % 5 == 0)
-            return "5";
-        else
-            return "not 2 or 5";
-    }
+       
+//work
+if(!isset($_POST['send'])){
+    session_start();
+        $_SESSION['arr'] =array();
+        if(count($_SESSION['arr'])===0){
+            $array = array();
 
-    function setGCDivisor($a,$b){
-        if ($b == 0) 
-            return $a; 
-        else 
-            return setGCDivisor($b, $a % $b);
-    }
-    function getGCDivisor($a,$b){
-        return setGCDivisor($a, $b);
-    }
-    function getLCMultiple($a,$b){
-       return ($a * $b)/setGCDivisor($a, $b);
-    }
-
-    function getOutputs(){
-        global $one;
-        global $two;
-
-        if($one==$two){
-            echo getMessage()["same"];
-            return;
-        } 
-        if($one<0 or $two<0){
-            echo getMessage()["negative"];
-            return;
+            for($i = 0;$i<6;$i++){
+                generateRandomNums($array);
+            }
+            $_SESSION['arr']= $array;
         }
 
 
-        echo $one . getMessage()["multi"] . getMultiple25($one)."</br>";
-        echo $two . getMessage()["multi"] . getMultiple25($two)."</br>";
+            echo "<h1>Enter minimum and maximum numbers</h1><BR>";
+            echo "<h3>Here are six different number find the minimum and maximum numbers in them</h3>";
+      //       To add
+            echo "<table style=\"width:250px\">";
+            echo "<tr>";
+              foreach($_SESSION['arr'] as $num){
+                  echo "<td>".$num."</td>";
+              }
+            echo "</tr>";
+            echo"</table>";
+              echo "<br>";
+              echo "<br>";
+      
+      
+            //Form 
+            echo "<form id=\"form1\" method=\"post\" action=\"game6.php\" >"; //Beginning form tag
+                // Form fields to input data
+                echo "<label>Enter the  minimum number</label>"; 
+                echo "<br />";
+      
+                echo "<input id=\"inputRows\" type=\"number\" name=\"minNum\" required=\"required\">"; 
+                echo "<br />";
+                echo "<br />";
+      
+                echo "<label>Enter the  maximum number</label>"; 
+                echo "<br />";
+                
+                echo "<input id=\"inputRows\" type=\"number\" name=\"maxNum\" required=\"required\">"; 
+                echo "<br />";
+                echo "<br />";
 
-        echo  getMessage()["gcd"] . getGCDivisor($one,$two)."</br>";
+                echo "<input type=\"hidden\" name=\"arr\" value=\"".implode(" ",$_SESSION['arr'])."\">"; 
 
-        echo  getMessage()["lcm"] . getLCMultiple($one,$two)."</br>";
+      
+                // Submit button to send form data		
+                echo "<input id=\"submitbutton1\" type=\"submit\" name=\"send\" value=\"SEND IT\" />"; 
+                echo "<br />";
+      
+                echo "<br />";
+      
+            echo "</form>"; 
+            }
+        if(isset($_POST['send'])){
+            $min = $_POST['minNum'];
+            $max = $_POST['maxNum'];
+            $arr = $_SESSION['arr'];
+            if(getError())
+                checkNums();
+                
+        }
+    function generateRandomNums(&$arr){
+        $temp = rand(0,100);
+        if(in_array($temp,$arr)){
+            generateRandomNums($arr);
+        }
+        else{
+            array_push($arr,$temp);
+        }
+    }
 
+    function getError(){
+        global $min;
+        global $max;
+        global $arr;
 
+        if(!in_array($min,$arr)and !in_array($max,$arr) ){
+            echo "Both the number you entered is not in the array";
+            return false;
+        }
+        elseif (!in_array($min,$arr) || !in_array($max,$arr)) {
+            echo "One of the number you entered is not in the array";
+            return false;
+        }
+        else{
+            echo "Both the number you entered is in the array";
+            return true;
+        }
 
     }
+
+    function checkNums(){
+        global $min;
+        global $max;
+        global $arr;
+
+        if($max === max($arr) && $min === min($arr)){
+            echo "Both the maximum and minimum you entered is right";
+            return true;
+        }
+        elseif ($max !== max($arr) && $min === min($arr)) {
+            echo "The minimum you entered is right";
+            return false;
+
+        }
+        elseif ($max === max($arr) && $min !== min($arr)) {
+            echo "The maximum you entered is right";
+            return false;
+
+        }
+        else{
+            echo "Both the maximum and minimum you entered is wrong";
+            return false;
+
+        }
+    }
+
+
+
     ?>
   </body>
 </html>
