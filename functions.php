@@ -153,17 +153,15 @@ function generateArrayLetters() {
     $arrLetters = [];
 
     for($i = 0 ; $i < TOTAL_GAME_NUM_CHAR_ARRAY ; $i++){
-        $charAux;
-
+        
         do {
-            $charAux = char(rand(ASCII_A_LOWER,ASCII_Z_LOWER));
+            $charAux = chr(rand(ASCII_A_LOWER,ASCII_Z_LOWER));
         } while(in_array($charAux, $arrLetters, TRUE));
 
         $arrLetters[$i] = $charAux;
     }
 
     return $arrLetters;
-
 }
 
 function getStringWithCommaFromArray($arrayNumLetter){
@@ -329,10 +327,18 @@ function validateCorrectAnswer() {
 
     switch ($gameLevel) {
         case 1:
-            // call here the function to validate the game1
+            sort($gameNumLetterArrSorted);
+
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+            compareArrayNumbersLetters();
             break;
         case 2:
-            // call here the function to validate the game2
+            rsort($gameNumLetterArrSorted);
+
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+            compareArrayNumbersLetters();
             break;
         case 3:
             // call here the function to validate the game3
@@ -373,11 +379,11 @@ function getInstructions() {
     switch ($gameLevel) {
         case 1:
             // Game Level 1: Order letters in ascending order
-            $instructions = 'order theses letters in ascending order';
+            $instructions = 'Order theses letters in ascending order';
             break;
         case 2:
             // Game Level 2: Order letters in descending order
-            $instructions = 'order theses letters in descending order';
+            $instructions = 'Order theses letters in descending order';
             break;
         case 3:
             //Game Level 3: Order numbers in ascending order
@@ -421,5 +427,26 @@ function resetLivesAndDateTimeSession(){
     $_SESSION['gameOver'] = false;
     $_SESSION['result'] = 'incomplete';
 }
+
+
+
+// *********************** Aditional functions *********************** //
+
+function setData($dbMain) {
+    $dbMain->username = $_SESSION['username'];
+    $dbMain->firstname = $_SESSION['fName'];
+    $dbMain->lastname = $_SESSION['lName'];
+    $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
+    $dbMain->scoreTime = date('Y-m-d H:i:s');
+    $dbMain->result = $_SESSION['result'];
+    $dbMain->livesUsed = $_SESSION['livesUsed'];
+}
+
+function session_dest(){
+    session_destroy();
+    header("location: login2.php");
+    exit;
+}
+
 
 ?>
