@@ -1,127 +1,95 @@
-<!--class3b.php-->
+<?php
+
+require "game6Controller.php";
+
+?>
+
 <!DOCTYPE html>
-<html>  
-  <head>
-    <title>HTML Embedded Form with echo and \</title>
-    <style>
-      .form{color:blue;}
-      .formhandling{color:red;}
-      .display-name{color:green;}
-      table, tr, td {
-  border: 1px solid black;
-}
-    </style>
-  </head>
-  <body>
-    <?php					
-      echo "<h1>Enter minimum and maximum numbers</h1><BR>";
-      echo "<h3>Here are six different number find the minimum and maximum numbers in them</h3><br>";
-
-//       To add
-// 
-// 
-//       
-
-      //Form 
-      echo "<form id=\"form1\" method=\"post\" action=\"ex3\" >"; //Beginning form tag
-          // Form fields to input data
-          echo "<label>Enter the  minimum number</label>"; 
-          echo "<br />";
-
-          echo "<input id=\"inputRows\" type=\"text\" name=\"numOne\" required=\"required\">"; 
-          echo "<br />";
-          echo "<br />";
-
-          echo "<label>Enter the  minimum number</label>"; 
-          echo "<br />";
-          
-          echo "<input id=\"inputRows\" type=\"text\" name=\"userDataSet\" required=\"required\">"; 
-          echo "<br />";
-          echo "<br />";
-
-
-          // Submit button to send form data		
-          echo "<input id=\"submitbutton1\" type=\"submit\" name=\"send\" value=\"SEND IT\" />"; 
-          echo "<br />";
-
-          echo "<br />";
-
-      echo "</form>"; //Closing form tag
-      //Form Handling
-      //Go below only after a user pressed the input button name="send" 
-    if (isset($_POST['send'])) {
-
-        $one = $_POST['numOne'];
-        $two = $_POST['numTwo'];
-
-
-        getOutputs();
-
-     
-
-      
-        
-    }
-
-    function getMessage(){
-      return array(
-        "negative"=>"One or both of the number you entered is negative",
-        "same"=>"The numbers you entered are the same",
-        "multi"=>" is multiple of:",
-        "gcd"=>"Their greatest divisor is ",
-        "lcm"=>"There least common multiple is "
-      );
-    }
-    
-    function getMultiple25($a){
-        if ($a % 2 == 0 && $a % 5 == 0)
-            return "2 and 5";
-        elseif ($a % 2 == 0)
-            return "2";
-        elseif($a % 5 == 0)
-            return "5";
-        else
-            return "not 2 or 5";
-    }
-
-    function setGCDivisor($a,$b){
-        if ($b == 0) 
-            return $a; 
-        else 
-            return setGCDivisor($b, $a % $b);
-    }
-    function getGCDivisor($a,$b){
-        return setGCDivisor($a, $b);
-    }
-    function getLCMultiple($a,$b){
-       return ($a * $b)/setGCDivisor($a, $b);
-    }
-
-    function getOutputs(){
-        global $one;
-        global $two;
-
-        if($one==$two){
-            echo getMessage()["same"];
-            return;
-        } 
-        if($one<0 or $two<0){
-            echo getMessage()["negative"];
-            return;
-        }
-
-
-        echo $one . getMessage()["multi"] . getMultiple25($one)."</br>";
-        echo $two . getMessage()["multi"] . getMultiple25($two)."</br>";
-
-        echo  getMessage()["gcd"] . getGCDivisor($one,$two)."</br>";
-
-        echo  getMessage()["lcm"] . getLCMultiple($one,$two)."</br>";
-
-
-
-    }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Leve 6</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="./css/style.css">-->
+</head>
+<body>
+    <?php
+        //require_once "header.php";
+        require_once "navBar.php";
     ?>
-  </body>
-</html>
+    <div class="wrapper p-5">
+        <h2>Game Level 6: <?php echo $instructions; ?></h2>
+        <p>Please <?php echo $instructions; ?> (from 100 to 0).</p>
+        <p>** put ',' between the numbers (Example: 5,4,3,2,1,0).</p>
+        <p>** put the minimum number before the maximum number (Example: 11,23).</p>
 
+
+        <?php 
+
+        if(!empty($answer_err)){
+            echo '<div class="alert alert-danger">' . $answer_err . '</div>';
+        }        
+        ?>
+
+        <form name="sign-in" action="game6.php" method="post">
+            <div class="form-group">
+                <label for="answer">Answer</label>
+                <input type="text" name="answer" id="answer" class="form-control <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
+                <span class="invalid-feedback"><?php echo $answer_err; ?></span>
+                <label for="">Game Numbers</label>
+                <input type="text" name="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
+
+                <?php 
+                if(!empty($resultLevelMsg)){
+                    if(strpos($resultLevelMsg, "Correct") || strpos($resultLevelMsg, "Congratulations")){
+                        echo '<div class="alert alert-success">' . $resultLevelMsg . '</div>';
+                    }else {
+                        echo '<div class="alert alert-danger">' . $resultLevelMsg . '</div>';
+                    }
+                }
+                ?>
+
+            </div>    
+            <div class="form-group">
+                <?php
+                    if (!$submitPressed || !empty($answer_err)) {
+                        echo <<<_NOTSUBMIT
+                            <input type="submit" class="btn btn-primary" value="Submit Answer" name="send">
+                        _NOTSUBMIT;
+                    } else {
+
+                        if(count($_SESSION['gainedLevels']) == TOTAL_LEVELS || $_SESSION['livesUsed'] > TOTAL_LIVES) { 
+                            echo <<<_WON_GAMEOVER
+                            <input type="submit" class="btn btn-primary" value="Home Page" name="home_page" >
+                            <input type="submit" class="btn btn-primary" value="Play Again" name="play_again" >
+                            <input type="submit" class="btn btn-primary" value="Sign-Out" name="sign-out" >
+                            _WON_GAMEOVER;
+                        } else {
+                            echo <<<_SUBMIT
+                            <input type="submit" class="btn btn-primary" value="Sign-Out" name="sign-out" >
+                            <input type="submit" class="btn btn-primary" value="Stop this Session" name="stop_session" >
+                            _SUBMIT;
+
+                            if (!$playerWon) {
+                                echo <<<_NOTWON
+                                <input type="submit" class="btn btn-primary" value="Try Again this Level" name="try_again" >
+                                _NOTWON;
+                            } else {
+                                echo <<<_WON
+                                <input type="submit" class="btn btn-primary" value="Go the Next Level" name="next_level">   
+                                _WON;
+                            }
+
+                        }   
+                        
+                    }
+                ?>
+            </div>
+        </form>
+    </div>
+
+    <?php
+        require_once "footer.php";
+    ?>
+</body>
+</html>

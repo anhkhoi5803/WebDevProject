@@ -25,7 +25,7 @@ $dbMain->livesUsed = "";
 
 $playerWon = FALSE;
 $submitPressed = FALSE;
-$gameLevel = 4;
+$gameLevel = 5;
 getInstructions();
 
 
@@ -59,7 +59,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if(isset($_POST["next_level"])) {
-        header("location: game5.php");
+        header("location: game6.php");
         exit;
     }
 
@@ -87,7 +87,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $answer = strtolower(trim($_POST['answer']));
         $gameNumLetterString = $_POST['game_num_letters'];
         $gameNumLetterArr = explode(',', $gameNumLetterString);
-
         if(validateEntryAnswer()) {
 
             validateCorrectAnswer();
@@ -118,42 +117,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         $resultLevelMsg = $resultLevelMsg . '<br/><br/>Congratulations!! You have won all the ' . TOTAL_LEVELS . ' levels!';
 
                         $dbMain->insertScore();
-
-                        //$dbMain->scoreTime = date('Y-m-d H:i:s', (strtotime($_SESSION['startTime']) - strtotime(date('Y-m-d H:i:s'))));
-                        
-                        // $datetime1 = new DateTime('2009-10-11 12:12:00');
-                        // $datetime2 = new DateTime('2009-10-13 10:12:00');
-                        //$interval = $datetime1->diff($datetime2);
-                        //echo $interval->format('%Y-%m-%d %H:%i:%s');
-
-                        // $datetime1 = new DateTime($_SESSION['startTime']);
-                        // $datetime2 = new DateTime(date('Y-m-d H:i:s'));
-                        // $interval = $datetime1->diff($datetime2);
-
-                        // $tstamp = strtotime($_SESSION['startTime']) - strtotime($interval->format('%Y-%m-%d %H:%i:%s'));
-                        
-                        //$dbMain->scoreTime = date_diff($_SESSION['startTime'] - date('Y-m-d H:i:s'));
-                        // $dbMain->scoreTime = $interval->format('%Y-%m-%d %H:%i:%s');
-                        //$dbMain->scoreTime = date('Y-m-d H:i:s',$tstamp);
-                        //$diff = date_diff($datetime1, $datetime2);
-
-                        // echo $dbMain->username;
-                        // echo "<br/>";
-                        // echo $dbMain->firstname;
-                        // echo "<br/>";
-                        // echo $dbMain->lastname;
-                        // echo "<br/>";
-                        // echo $dbMain->registrationOrder;
-                        // echo "<br/>";
-                        // echo $_SESSION['startTime'];
-                        // echo "<br/>";
-                        // echo $dbMain->scoreTime;
-                        // echo "<br/>";
-                        // echo $dbMain->result;
-                        // echo "<br/>";
-                        // echo $dbMain->livesUsed;
-                        // echo "<br/>";
-
                     }
                 }
             }else {
@@ -175,33 +138,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
 
-                    // $datetime1 = new DateTime($_SESSION['startTime']);
-                    // $datetime2 = new DateTime(date('Y-m-d H:i:s'));
-                    // $interval = $datetime1->diff($datetime2);
-    
-                    // $tstamp = strtotime($_SESSION['startTime']) - strtotime($interval->format('%Y-%m-%d %H:%i:%s'));
-                    
-                    // $dbMain->scoreTime = date('Y-m-d H:i:s',$tstamp);
-                    //$diff = date_diff($datetime1, $datetime2);
-                    
-    
-                    // echo $dbMain->username;
-                    // echo "<br/>";
-                    // echo $dbMain->firstname;
-                    // echo "<br/>";
-                    // echo $dbMain->lastname;
-                    // echo "<br/>";
-                    // echo $dbMain->registrationOrder;
-                    // echo "<br/>";
-                    // echo $_SESSION['startTime'];
-                    // echo "<br/>";
-                    // echo $dbMain->scoreTime;
-                    // echo "<br/>";
-                    // echo $dbMain->result;
-                    // echo "<br/>";
-                    // echo $dbMain->livesUsed;
-                    // echo "<br/>";
-
                 } else {
                     $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
                 }
@@ -218,5 +154,86 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 }
+
+?>
+
+<?php
+    // if(isset($_POST['send'])){
+    //     $min = $_POST['minNum'];
+    //     $max = $_POST['maxNum'];
+    //     $arr = $_SESSION['arr'];
+    //     if(getError())
+    //         checkNums();
+    //     }
+    // function generateRandomNums(&$arr){
+    //     $temp = rand(0,100);
+    //     if(in_array($temp,$arr)){
+    //         generateRandomNums($arr);
+    //     }
+    //     else{
+    //         array_push($arr,$temp);
+    //     }
+    // }
+    // if(!isset($_POST['send'])){
+    //     session_start();
+    //         $_SESSION['arr'] =array();
+    //         if(count($_SESSION['arr'])===0){
+    //             $array = array();
+    
+    //             for($i = 0;$i<6;$i++){
+    //                 generateRandomNums($array);
+    //             }
+    //             $_SESSION['arr']= $array;
+    //         }
+    //     }
+    
+    
+    // function getError(){
+    //     global $min;
+    //     global $max;
+    //     global $arr;
+
+    //     if(!in_array($min,$arr)and !in_array($max,$arr) ){
+    //         echo "Both the number you entered is not in the array";
+    //         return false;
+    //     }
+    //     elseif (!in_array($min,$arr) || !in_array($max,$arr)) {
+    //         echo "One of the number you entered is not in the array";
+    //         return false;
+    //     }
+    //     else{
+    //         echo "Both the number you entered is in the array";
+    //         return true;
+    //     }
+
+    // }
+
+    // function checkNums(){
+    //     global $min;
+    //     global $max;
+    //     global $arr;
+
+    //     if($max === max($arr) && $min === min($arr)){
+    //         echo "Both the maximum and minimum you entered is right";
+    //         return true;
+    //     }
+    //     elseif ($max !== max($arr) && $min === min($arr)) {
+    //         echo "The minimum you entered is right";
+    //         return false;
+
+    //     }
+    //     elseif ($max === max($arr) && $min !== min($arr)) {
+    //         echo "The maximum you entered is right";
+    //         return false;
+
+    //     }
+    //     else{
+    //         echo "Both the maximum and minimum you entered is wrong";
+    //         return false;
+
+    //     }
+    // }
+
+
 
 ?>

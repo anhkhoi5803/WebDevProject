@@ -119,7 +119,8 @@ function validatePasswordModify(){
 
 // Declare and initializing variable with empty values
 $playerWon = $submitPressed = FALSE;
-$answer = $answerArr = $gameNumLetterArr = $gameNumLetterArrSorted = $gameNumLetterString = $gameNumLetterStringSorted = $resultLevel = $resultLevelMsg = $answer_err = $instructions = "";
+$answer = $resultLevel = $resultLevelMsg = $answer_err = $instructions = $gameNumLetterString = $gameNumLetterStringSorted = "";
+$answerArr = $gameNumLetterArr = $gameNumLetterArrSorted = array();
 $gameLevel = 1;
 define('MAX_NUMBER', 100);
 define('MIN_NUMBER', 0);
@@ -130,6 +131,7 @@ define('ASCII_A_LOWER', 97);
 define('ASCII_Z_LOWER', 122);
 define('TOTAL_LIVES', 6);
 define('TOTAL_LEVELS', 6);
+define('TOTAL_LETTERS', 'abcdefghijklmnopqrstuvwxyz' );
 
 function generateArrayNumbers() {
     $arrNum = [];
@@ -152,15 +154,39 @@ function generateArrayNumbers() {
 function generateArrayLetters() {
     $arrLetters = [];
 
+<<<<<<< HEAD
     for($i = 0 ; $i < TOTAL_GAME_NUM_CHAR_ARRAY ; $i++){
         
         do {
             $charAux = chr(rand(ASCII_A_LOWER,ASCII_Z_LOWER));
         } while(in_array($charAux, $arrLetters, TRUE));
+=======
+    // for($i = 0 ; $i < TOTAL_GAME_NUM_CHAR_ARRAY ; $i++){
+    //     $charAux;
 
-        $arrLetters[$i] = $charAux;
+    //     do {
+    //         $charAux = chr(rand(97,101));
+    //     } while(in_array($charAux, $arrLetters, TRUE));
+
+    //     $arrLetters[$i] = $charAux;
+    // }
+
+    //$characters = 'abcdefghijklmnopqrstuvwxyz';
+    $chars = "abcdef";
+
+    for ($i = 0; $i < TOTAL_GAME_NUM_CHAR_ARRAY; $i++) {
+       
+        //$randomString .= $chars[$index];
+
+        $charAux;
+        do {
+             $index = rand(0, strlen(TOTAL_LETTERS) - 1);
+             $charAux = TOTAL_LETTERS[$index];
+         } while(in_array($charAux, $arrLetters, TRUE));
+>>>>>>> b25c2552a8c56a559257e1d8b21c1e9204be30a8
+
+         $arrLetters[$i] = $charAux;
     }
-
     return $arrLetters;
 }
 
@@ -316,6 +342,85 @@ function compareArrayNumbersLetters() {
 
 }
 
+function checkMinMaxNumber() {
+
+    global $gameLevel;
+    global $gameNumLetterArr;
+    global $answerArr;
+    global $resultLevel;
+    $numbersOrLetters = getStringNumbersOrLetters();
+
+    $arrIntersec = array_intersect($gameNumLetterArr, $answerArr);
+
+    $gameArr =array();
+    foreach($gameNumLetterArr as $n){
+        $gameArr[] = intval($n);
+    }
+
+    $ansArr = array();
+    foreach($answerArr as $n){
+        $ansArr[] = intval($n);
+    }
+
+    var_dump($ansArr);
+    var_dump($gameArr);
+    if(empty($arrIntersec)){
+        $resultLevel = "Incorrect - All your " . $numbersOrLetters . " are different than ours";
+    } else {
+        if(count($arrIntersec) == TOTAL_ANSWER_ARRAY_LEVEL_5_6) {
+            if(min($gameArr) == $ansArr[0]&& max($gameArr) === $ansArr[1]){
+                $resultLevel = "Correct - Your " . $numbersOrLetters . " is the correct minimum and maximum numbers";
+            }else{
+                $resultLevel = "Incorrect - Your " . $numbersOrLetters . " is not the correct minimum and maximum numbers";
+            }    
+        }else {
+            $resultLevel = "Incorrect - Some of your " . $numbersOrLetters . " are different than ours";
+        }
+    }
+
+}
+
+
+function checkFirstLastLetter(){
+    global $gameLevel;
+    global $gameNumLetterArr;
+    global $gameNumLetterArrSorted;
+    global $answerArr;
+    global $resultLevel;
+    $numbersOrLetters = getStringNumbersOrLetters();
+
+    $arrIntersec = array_intersect($gameNumLetterArrSorted, $answerArr);
+
+    // $gameArr =sort($gameNumLetterArr);
+    // // foreach($gameNumLetterArr as $n){
+    // //     $gameArr[] = intval($n);
+    // // }
+
+    // $ansArr = $answerArr;
+    // // foreach($answerArr as $n){
+    // //     $ansArr[] = intval($n);
+    // // }
+
+    var_dump($gameNumLetterArrSorted);
+    var_dump($answerArr);
+
+    if(empty($arrIntersec)){
+
+        $resultLevel = "Incorrect - All your " . $numbersOrLetters . " are different than ours";
+
+    } else {
+        if(count($arrIntersec) == TOTAL_ANSWER_ARRAY_LEVEL_5_6) {
+            if($gameNumLetterArrSorted[0] == $answerArr[0]&& $gameNumLetterArrSorted[TOTAL_GAME_NUM_CHAR_ARRAY-1] === $answerArr[1]){
+                $resultLevel = "Correct - Your " . $numbersOrLetters . " is the correct first and last letters";
+            }else{
+                $resultLevel = "Incorrect - Your " . $numbersOrLetters . " is not the correct first and last letters";
+            }    
+        }else {
+            $resultLevel = "Incorrect - Some of your " . $numbersOrLetters . " are different than ours";
+        }
+    }
+}
+
 function validateCorrectAnswer() {
 
     global $gameLevel;
@@ -327,6 +432,10 @@ function validateCorrectAnswer() {
 
     switch ($gameLevel) {
         case 1:
+<<<<<<< HEAD
+=======
+            // call here the function to validate the game1
+>>>>>>> b25c2552a8c56a559257e1d8b21c1e9204be30a8
             sort($gameNumLetterArrSorted);
 
             $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
@@ -334,6 +443,10 @@ function validateCorrectAnswer() {
             compareArrayNumbersLetters();
             break;
         case 2:
+<<<<<<< HEAD
+=======
+            // call here the function to validate the game2
+>>>>>>> b25c2552a8c56a559257e1d8b21c1e9204be30a8
             rsort($gameNumLetterArrSorted);
 
             $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
@@ -362,9 +475,19 @@ function validateCorrectAnswer() {
             break;
         case 5:
             // call here the function to validate the game5
+
+            sort($gameNumLetterArrSorted);
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+
+            checkFirstLastLetter();
+
             break;
         case 6:
             // call here the function to validate the game6
+            $gameNumLetterStringSorted = getStringWithCommaFromArray($gameNumLetterArrSorted);
+
+            checkMinMaxNumber();
             break;
     }
 

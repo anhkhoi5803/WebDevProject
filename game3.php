@@ -61,6 +61,7 @@ require_once "game3Controller.php";
                     if (!$submitPressed || !empty($answer_err)) {
                         echo <<<_NOTSUBMIT
                             <input type="submit" class="btn btn-primary" value="Submit Answer" name="send">
+                            <input type="submit" class="btn btn-primary" value="Sign-Out" name="sign-out" >
                         _NOTSUBMIT;
                     } else {
 
