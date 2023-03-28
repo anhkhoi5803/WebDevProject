@@ -488,7 +488,7 @@ class ManipulateDB
             //2-Connect to the DB
             if ($this->connectToDB() === TRUE) {
                 
-                if(validateNoError()){
+                if(validatePasswordModify()){
                         
                     if ($this->executeSql($this->sqlCode()['userNameExist']) === TRUE) {
                         
@@ -507,6 +507,7 @@ class ManipulateDB
                             else{
                                 echo "Redirecting to login page";
                                 header("Refresh:10 ;location: login.php");
+                                exit();
                             }
 
 

@@ -21,6 +21,7 @@
         $db = new ManipulateDB();
 
         $db->createDBandTAB();
+        $db->insertMockDataToTABs();
 
         
         ?>

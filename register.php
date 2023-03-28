@@ -72,7 +72,7 @@ if (isset($_SESSION['mensaje'])) {
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Create" name = "send">                
             </div>
-            <p>Already have an account? <a href="">Login here</a>.</p>
+            <p>Already have an account? <a href="login.php">Login here</a>.</p>
         </form>
     </div>
     <?php require_once "footer.php";?>
