@@ -21,6 +21,11 @@
         $db = new ManipulateDB();
 
         $db->createDBandTAB();
+        //$db->insertMockDataToTABs();
+        
+
+        header("location: login.php");
+        exit;
 
         
         ?>

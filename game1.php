@@ -1,49 +1,46 @@
 <!-- 
-Thiago Soares de Souza
+Ronald Mercado H.
 Web Server Applications
-26 March 2023
+27 March 2023
 LaSalle College
-Web Server Project - Game 3 Form
+Web Server Project - Game Level 1 
 -->
 
-<?php
-
-require_once "game3Controller.php";
-
-?>
+<?php require_once "gameControllerL12.php";?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Game Leve 3</title>
+    <title>Game Leve 1</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!--<link rel="stylesheet" href="./css/style.css">-->
+    <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
-    <?php
-        //require_once "header.php";
-        require_once "navBar.php";
-    ?>
+    <?php require_once "navBar.php";?>
+    
     <div class="wrapper p-5">
-        <h2>Game Level 3: <?php echo $instructions; ?></h2>
-        <p>Please <?php echo $instructions; ?> (from 0 to 100).</p>
-        <p>** put ',' between the numbers (Example: 0,1,2,3,4,5).</p>
+        <h2>Game Level 1: <?php echo $instructions; ?></h2>
+        <p>Please <?php echo $instructions; ?> (from a to z).</p>
+        <p>Use ',' between each letter (Example: a,b,c,d,e,f).</p>
 
         <?php 
 
         if(!empty($answer_err)){
-            echo '<div class="alert alert-danger">' . $answer_err . '</div>';
-        }        
+            echo '<div class="alert alert-danger">' . $answer_err . '</div>';}        
         ?>
 
-        <form name="sign-in" action="game3.php" method="post">
+        <form name="sign-in" action="game1.php" method="post">
             <div class="form-group">
+                
+                <label for="">Letters to order: </label>
+                <input type="text" name="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
+
                 <label for="answer">Answer</label>
                 <input type="text" name="answer" id="answer" class="form-control <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
                 <span class="invalid-feedback"><?php echo $answer_err; ?></span>
-                <label for="">Game Numbers</label>
-                <input type="text" name="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
 
                 <?php 
                 if(!empty($resultLevelMsg)){
@@ -55,12 +52,14 @@ require_once "game3Controller.php";
                 }
                 ?>
 
-            </div>    
+            </div>
+
             <div class="form-group">
                 <?php
                     if (!$submitPressed || !empty($answer_err)) {
                         echo <<<_NOTSUBMIT
                             <input type="submit" class="btn btn-primary" value="Submit Answer" name="send">
+                            <input type="submit" class="btn btn-primary" value="Sign-Out" name="sign-out" >
                         _NOTSUBMIT;
                     } else {
 
