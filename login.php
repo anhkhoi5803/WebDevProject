@@ -20,12 +20,12 @@ require_once "loginController.php";
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
-<body>
+<body class="login_body">
     <?php
         //require_once "header.php";
         require_once "navBar.php";
     ?>
-    <div class="wrapper p-5">
+    <div class="wrapper p-5 login_body">
         <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>
 
