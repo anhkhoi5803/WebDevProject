@@ -121,7 +121,9 @@ function validatePasswordModify(){
 $playerWon = $submitPressed = FALSE;
 $answer = $resultLevel = $resultLevelMsg = $answer_err = $instructions = $gameNumLetterString = $gameNumLetterStringSorted = "";
 $answerArr = $gameNumLetterArr = $gameNumLetterArrSorted = array();
-$gameLevel = 1;
+
+$gameLevel; // > values assigned depending on level game
+
 define('MAX_NUMBER', 100);
 define('MIN_NUMBER', 0);
 define('TOTAL_GAME_NUM_CHAR_ARRAY', 6);
@@ -138,7 +140,7 @@ function generateArrayNumbers() {
 
     for($i = 0 ; $i < TOTAL_GAME_NUM_CHAR_ARRAY ; $i++){
         
-        $numAux;
+        $numAux = 0; // variable were asking for initialization
 
         do {
             $numAux = rand(MIN_NUMBER,MAX_NUMBER);
@@ -163,6 +165,7 @@ function generateArrayLetters() {
     }
     return $arrLetters;
 }
+
 function getStringWithCommaFromArray($arrayNumLetter){
     $strResult = '';
     for($i = 0 ; $i < count($arrayNumLetter) ; $i++){
@@ -274,6 +277,7 @@ function compareArrayNumbersLetters() {
     global $gameNumLetterArrSorted;
     global $answerArr;
     global $resultLevel;
+    global $instructions;
     $numbersOrLetters = getStringNumbersOrLetters();
     $arrIntersec = array_intersect($gameNumLetterArrSorted, $answerArr);
     if(empty($arrIntersec)){
@@ -281,10 +285,19 @@ function compareArrayNumbersLetters() {
     } else {
         if(count($arrIntersec) == TOTAL_ANSWER_ARRAY_LEVEL_1_2_3_4) {
             if($gameNumLetterArrSorted === $answerArr){
-                $resultLevel = "Correct - Your " . $numbersOrLetters . " have been correctly ordered in ascending order";
+                if(strpos($resultLevel, "ascending")) 
+                    $resultLevel = "Correct - Your " . $numbersOrLetters . " have been correctly ordered in ascending order";
+                    else{
+                        $resultLevel = "Correct - Your " . $numbersOrLetters . " have been correctly ordered in descending order";
+                    }
             }else{
-                $resultLevel = "Incorrect - Your " . $numbersOrLetters . " have not been correctly ordered in ascending order";
-            }    
+                if(strpos($resultLevel, "ascending")){
+                    $resultLevel = "Incorrect - Your " . $numbersOrLetters . " have not been correctly ordered in ascending order";
+                }else{
+                    $resultLevel = "Incorrect - Your " . $numbersOrLetters . " have not been correctly ordered in descending order";
+                }               
+            }           
+            
         }else {
             $resultLevel = "Incorrect - Some of your " . $numbersOrLetters . " are different than ours";
         }
@@ -456,6 +469,7 @@ function getResultLevelMsg() {
     global $answer;
     global $resultLevelMsg;
     global $instructions;
+    
     $numbersOrLetters = getStringNumbersOrLetters();
 
     $resultLevelMsg = "Game " . $numbersOrLetters . ": " . $gameNumLetterStringSorted .
@@ -472,7 +486,7 @@ function resetLivesAndDateTimeSession(){
     $_SESSION['startTime'] = date('Y-m-d H:i:s');
     $_SESSION['gainedLevels'] = [];
     $_SESSION['gameOver'] = false;
-    $_SESSION['result'] = 'incomplete';
+    $_SESSION['result'] = 'incomplete';    
 }
 
 

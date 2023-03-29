@@ -8,12 +8,13 @@
         session_dest();
     }
 
-    $answer_placeholder = "Enter your answer";
+    $gameLevel = (int)$_SESSION['level'];
 
+    $answer_placeholder = "Enter your answer";
     $dbMain = new ManipulateDB(); 
     $playerWon = FALSE;
     $submitPressed = FALSE;
-    $gameLevel = 1;
+
     getInstructions();
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -33,19 +34,32 @@
         }
 
         if(isset($_POST["next_level"])) {
-            header("location: game2.php");
-            exit;
+            
+            if ($_SERVER['PHP_SELF'] == "/game1.php") { 
+                               
+                header("Location: game2.php");
+                exit;
+            }else{
+                header("location: game3.php");
+                exit;
+            }
         }
 
         if(isset($_POST["play_again"])) {
-            resetLivesAndDateTimeSession();
-            header("location: game1.php");
-            exit;
+            //resetLivesAndDateTimeSession();
+
+            if ($_SERVER['PHP_SELF'] == "/game2.php") {                
+                header("Location: game2.php");
+                exit;
+            }else{
+                header("location: game1.php");
+                exit;
+            }
         }
 
         if(isset($_POST["home_page"])) {
             resetLivesAndDateTimeSession();
-            header("location: login2.php");
+            header("location: login.php");
             exit;
         }
 
@@ -55,7 +69,7 @@
 
         // game Start
         if(isset($_POST['send'])){
-
+            
             $submitPressed = TRUE;
             $answer = strtolower(trim($_POST['answer']));
             $gameNumLetterString = $_POST['game_num_letters'];

@@ -3,36 +3,36 @@ Ronald Mercado H.
 Web Server Applications
 27 March 2023
 LaSalle College
-Web Server Project - Game Level 1 
+Web Server Project - Game Level 2 
 -->
+
+<?php
+
+    require_once "gameControllerL12.php";
+    $_SESSION['level'] = 2;
+    require_once "functions.php";
+    
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Game Leve 1</title>
+    <title>Game Leve 2</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
-    
-    <?php
-        require_once "gameControllerL12.php";    
-        $_SESSION['level'] = 1;
-        require_once "functions.php";
-    ?>
-
     <?php require_once "navBar.php";?>
-    
     <div class="wrapper p-5">
-        <h2>Game Level 1: <?php echo $instructions; ?></h2>
-        <p>Please <?php echo $instructions; ?> (from a to z).</p>
-        <p>Use ',' between each letter (Example: a,b,c,d,e,f).</p>
+        <h2>Game Level 2: <?php echo $instructions; ?></h2>
+        <p>Please <?php echo $instructions; ?> (from z to a).</p>
+        <p>Use ',' between each letter (Example: f,e,d,c,b,a).</p>
 
-        <?php
-        
-        
+        <?php 
+
         if(!empty($answer_err)){
             echo '<div class="alert alert-danger">' . $answer_err . '</div>';}        
         ?>
