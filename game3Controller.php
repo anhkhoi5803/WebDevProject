@@ -28,10 +28,10 @@ $submitPressed = FALSE;
 $gameLevel = 3;
 getInstructions();
 
-// if(isset($_SESSION['loggedin']) && !(in_array(($gameLevel-1), $_SESSION['gainedLevels'], true))) {
-//     header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
-//     exit;
-// }
+if(isset($_SESSION['loggedin']) && !(in_array(($gameLevel-1), $_SESSION['gainedLevels'], true))) {
+    header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
+    exit;
+}
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 
