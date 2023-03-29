@@ -29,8 +29,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if($errorValidation){
         $dbMain = new ManipulateDB();
         $dbMain->username = $username;
-        //$dbMain->newPassword = password_hash($password, PASSWORD_DEFAULT);
-        $dbMain->newPassword = $password;
+        $dbMain->newPassword = password_hash($password, PASSWORD_DEFAULT);
+        //$dbMain->newPassword = $password;
         $dbMain->changePassword();
     }
     
