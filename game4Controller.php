@@ -15,20 +15,23 @@ if(!isset($_SESSION['loggedin']) && !$_SESSION['loggedin'] === true) {
 $answer_placeholder = "Enter your answer";
 
 $dbMain = new ManipulateDB();
-$dbMain->username = "";
-$dbMain->firstname = "";
-$dbMain->lastname = "";
-$dbMain->registrationOrder = "";
-$dbMain->scoreTime = "";
-$dbMain->result = "";
-$dbMain->livesUsed = "";
+// $dbMain->username = "";
+// $dbMain->firstname = "";
+// $dbMain->lastname = "";
+// $dbMain->registrationOrder = "";
+// $dbMain->scoreTime = "";
+// $dbMain->result = "";
+// $dbMain->livesUsed = "";
 
 $playerWon = FALSE;
 $submitPressed = FALSE;
 $gameLevel = 4;
 getInstructions();
 
-
+if(isset($_SESSION['loggedin']) && !(in_array(($gameLevel-1), $_SESSION['gainedLevels'], true))) {
+    header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
+    exit;
+}
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -43,13 +46,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['result'] = 'failure';
         }
 
-        $dbMain->username = $_SESSION['username'];
-        $dbMain->firstname = $_SESSION['fName'];
-        $dbMain->lastname = $_SESSION['lName'];
-        $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
-        $dbMain->scoreTime = date('Y-m-d H:i:s');
-        $dbMain->result = $_SESSION['result'];
-        $dbMain->livesUsed = $_SESSION['livesUsed'];
+        // $dbMain->username = $_SESSION['username'];
+        // $dbMain->firstname = $_SESSION['fName'];
+        // $dbMain->lastname = $_SESSION['lName'];
+        // $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
+        // $dbMain->scoreTime = date('Y-m-d H:i:s');
+        // $dbMain->result = $_SESSION['result'];
+        // $dbMain->livesUsed = $_SESSION['livesUsed'];
+
+        setData($dbMain);
 
         $dbMain->insertScore();
         
@@ -58,8 +63,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
+    // if(isset($_POST["previous_level"])) {
+    //     header("location: game" . ($gameLevel-1) . ".php");
+    //     exit;
+    // }
+
     if(isset($_POST["next_level"])) {
-        header("location: game5.php");
+        header("location: game" . ($gameLevel+1) . ".php");
         exit;
     }
 
@@ -101,110 +111,50 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     array_push($_SESSION['gainedLevels'], $gameLevel);
 
-                    echo count($_SESSION['gainedLevels']);
-
-                    if(count($_SESSION['gainedLevels']) == TOTAL_LEVELS){
+                    // if(count($_SESSION['gainedLevels']) == TOTAL_LEVELS){
                         
-                        $_SESSION['result'] = 'success';
+                    //     $_SESSION['result'] = 'success';
 
-                        $dbMain->username = $_SESSION['username'];
-                        $dbMain->firstname = $_SESSION['fName'];
-                        $dbMain->lastname = $_SESSION['lName'];
-                        $dbMain->registrationOrder = $_SESSION['registrationOrder'];
-                        $dbMain->scoreTime = date('Y-m-d H:i:s');
-                        $dbMain->result = $_SESSION['result'];
-                        $dbMain->livesUsed = $_SESSION['livesUsed'];
+                    //     $dbMain->username = $_SESSION['username'];
+                    //     $dbMain->firstname = $_SESSION['fName'];
+                    //     $dbMain->lastname = $_SESSION['lName'];
+                    //     $dbMain->registrationOrder = $_SESSION['registrationOrder'];
+                    //     $dbMain->scoreTime = date('Y-m-d H:i:s');
+                    //     $dbMain->result = $_SESSION['result'];
+                    //     $dbMain->livesUsed = $_SESSION['livesUsed'];
 
-                        $resultLevelMsg = $resultLevelMsg . '<br/><br/>Congratulations!! You have won all the ' . TOTAL_LEVELS . ' levels!';
+                    //     $resultLevelMsg = $resultLevelMsg . '<br/><br/>Congratulations!! You have won all the ' . TOTAL_LEVELS . ' levels!';
 
-                        $dbMain->insertScore();
+                    //     $dbMain->insertScore();
 
-                        //$dbMain->scoreTime = date('Y-m-d H:i:s', (strtotime($_SESSION['startTime']) - strtotime(date('Y-m-d H:i:s'))));
-                        
-                        // $datetime1 = new DateTime('2009-10-11 12:12:00');
-                        // $datetime2 = new DateTime('2009-10-13 10:12:00');
-                        //$interval = $datetime1->diff($datetime2);
-                        //echo $interval->format('%Y-%m-%d %H:%i:%s');
-
-                        // $datetime1 = new DateTime($_SESSION['startTime']);
-                        // $datetime2 = new DateTime(date('Y-m-d H:i:s'));
-                        // $interval = $datetime1->diff($datetime2);
-
-                        // $tstamp = strtotime($_SESSION['startTime']) - strtotime($interval->format('%Y-%m-%d %H:%i:%s'));
-                        
-                        //$dbMain->scoreTime = date_diff($_SESSION['startTime'] - date('Y-m-d H:i:s'));
-                        // $dbMain->scoreTime = $interval->format('%Y-%m-%d %H:%i:%s');
-                        //$dbMain->scoreTime = date('Y-m-d H:i:s',$tstamp);
-                        //$diff = date_diff($datetime1, $datetime2);
-
-                        // echo $dbMain->username;
-                        // echo "<br/>";
-                        // echo $dbMain->firstname;
-                        // echo "<br/>";
-                        // echo $dbMain->lastname;
-                        // echo "<br/>";
-                        // echo $dbMain->registrationOrder;
-                        // echo "<br/>";
-                        // echo $_SESSION['startTime'];
-                        // echo "<br/>";
-                        // echo $dbMain->scoreTime;
-                        // echo "<br/>";
-                        // echo $dbMain->result;
-                        // echo "<br/>";
-                        // echo $dbMain->livesUsed;
-                        // echo "<br/>";
-
-                    }
+                    // }
                 }
             }else {
 
-                if($_SESSION['livesUsed'] >= TOTAL_LIVES) {
-                    $_SESSION['result'] = 'failure';
+                //if(!(in_array($gameLevel, $_SESSION['gainedLevels'], true))) {
+                    if($_SESSION['livesUsed'] >= TOTAL_LIVES) {
+                        $_SESSION['result'] = 'failure';
 
-                    $dbMain->username = $_SESSION['username'];
-                    $dbMain->firstname = $_SESSION['fName'];
-                    $dbMain->lastname = $_SESSION['lName'];
-                    $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
-                    $dbMain->scoreTime = date('Y-m-d H:i:s');
-                    $dbMain->result = $_SESSION['result'];
-                    $dbMain->livesUsed = $_SESSION['livesUsed'];
+                        // $dbMain->username = $_SESSION['username'];
+                        // $dbMain->firstname = $_SESSION['fName'];
+                        // $dbMain->lastname = $_SESSION['lName'];
+                        // $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
+                        // $dbMain->scoreTime = date('Y-m-d H:i:s');
+                        // $dbMain->result = $_SESSION['result'];
+                        // $dbMain->livesUsed = $_SESSION['livesUsed'];
 
-                    $resultLevelMsg = $resultLevelMsg . '<br/><br/>Well Played. Try again later!! You have used all the ' . TOTAL_LIVES . ' lives!';
+                        setData($dbMain);
 
-                    $dbMain->insertScore();
+                        $resultLevelMsg = $resultLevelMsg . '<br/><br/>Well Played. Try again later!! You have used all the ' . TOTAL_LIVES . ' lives!';
 
-                    $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
+                        $dbMain->insertScore();
 
-                    // $datetime1 = new DateTime($_SESSION['startTime']);
-                    // $datetime2 = new DateTime(date('Y-m-d H:i:s'));
-                    // $interval = $datetime1->diff($datetime2);
-    
-                    // $tstamp = strtotime($_SESSION['startTime']) - strtotime($interval->format('%Y-%m-%d %H:%i:%s'));
-                    
-                    // $dbMain->scoreTime = date('Y-m-d H:i:s',$tstamp);
-                    //$diff = date_diff($datetime1, $datetime2);
-                    
-    
-                    // echo $dbMain->username;
-                    // echo "<br/>";
-                    // echo $dbMain->firstname;
-                    // echo "<br/>";
-                    // echo $dbMain->lastname;
-                    // echo "<br/>";
-                    // echo $dbMain->registrationOrder;
-                    // echo "<br/>";
-                    // echo $_SESSION['startTime'];
-                    // echo "<br/>";
-                    // echo $dbMain->scoreTime;
-                    // echo "<br/>";
-                    // echo $dbMain->result;
-                    // echo "<br/>";
-                    // echo $dbMain->livesUsed;
-                    // echo "<br/>";
+                        $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
 
-                } else {
-                    $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
-                }
+                    } else {
+                        $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
+                    }
+                //}
 
             }
         }
