@@ -15,23 +15,13 @@ if(!isset($_SESSION['loggedin']) && !$_SESSION['loggedin'] === true) {
 $answer_placeholder = "Enter your answer";
 
 $dbMain = new ManipulateDB();
-// $dbMain->username = "";
-// $dbMain->firstname = "";
-// $dbMain->lastname = "";
-// $dbMain->registrationOrder = "";
-// $dbMain->scoreTime = "";
-// $dbMain->result = "";
-// $dbMain->livesUsed = "";
 
 $playerWon = FALSE;
 $submitPressed = FALSE;
 $gameLevel = 3;
 getInstructions();
 
-if(isset($_SESSION['loggedin']) && !(in_array(($gameLevel-1), $_SESSION['gainedLevels'], true))) {
-    header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
-    exit;
-}
+checkPlayerCanAccessLevelOrRedirectPlayer();
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -45,14 +35,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         if($_SESSION['livesUsed'] > TOTAL_LIVES) {
             $_SESSION['result'] = 'failure';
         }
-
-        // $dbMain->username = $_SESSION['username'];
-        // $dbMain->firstname = $_SESSION['fName'];
-        // $dbMain->lastname = $_SESSION['lName'];
-        // $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
-        // $dbMain->scoreTime = date('Y-m-d H:i:s');
-        // $dbMain->result = $_SESSION['result'];
-        // $dbMain->livesUsed = $_SESSION['livesUsed'];
 
         setData($dbMain);
 
@@ -110,24 +92,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 if(!(in_array($gameLevel, $_SESSION['gainedLevels'], true))) {
                     
                     array_push($_SESSION['gainedLevels'], $gameLevel);
-
-                    // if(count($_SESSION['gainedLevels']) == TOTAL_LEVELS){
-                        
-                    //     $_SESSION['result'] = 'success';
-
-                    //     $dbMain->username = $_SESSION['username'];
-                    //     $dbMain->firstname = $_SESSION['fName'];
-                    //     $dbMain->lastname = $_SESSION['lName'];
-                    //     $dbMain->registrationOrder = $_SESSION['registrationOrder'];
-                    //     $dbMain->scoreTime = date('Y-m-d H:i:s');
-                    //     $dbMain->result = $_SESSION['result'];
-                    //     $dbMain->livesUsed = $_SESSION['livesUsed'];
-
-                    //     $resultLevelMsg = $resultLevelMsg . '<br/><br/>Congratulations!! You have won all the ' . TOTAL_LEVELS . ' levels!';
-
-                    //     $dbMain->insertScore();
-
-                    // }
                 }
             }else {
 
@@ -135,25 +99,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     if($_SESSION['livesUsed'] >= TOTAL_LIVES) {
                         $_SESSION['result'] = 'failure';
 
-                        // $dbMain->username = $_SESSION['username'];
-                        // $dbMain->firstname = $_SESSION['fName'];
-                        // $dbMain->lastname = $_SESSION['lName'];
-                        // $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
-                        // $dbMain->scoreTime = date('Y-m-d H:i:s');
-                        // $dbMain->result = $_SESSION['result'];
-                        // $dbMain->livesUsed = $_SESSION['livesUsed'];
-
                         setData($dbMain);
 
                         $resultLevelMsg = $resultLevelMsg . '<br/><br/>Well Played. Try again later!! You have used all the ' . TOTAL_LIVES . ' lives!';
 
                         $dbMain->insertScore();
 
-                        $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
+                    } 
 
-                    } else {
-                        $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
-                    }
+                    $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
                 //}
 
             }
