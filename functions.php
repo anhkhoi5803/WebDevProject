@@ -425,7 +425,6 @@ function validateCorrectAnswer() {
             break;
     }
 
-
 }
 
 function getInstructions() {
@@ -436,11 +435,11 @@ function getInstructions() {
     switch ($gameLevel) {
         case 1:
             // Game Level 1: Order letters in ascending order
-            $instructions = 'Order theses letters in ascending order';
+            $instructions = 'Order these letters in ascending order';
             break;
         case 2:
             // Game Level 2: Order letters in descending order
-            $instructions = 'Order theses letters in descending order';
+            $instructions = 'Order these letters in descending order';
             break;
         case 3:
             //Game Level 3: Order numbers in ascending order

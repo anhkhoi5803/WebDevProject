@@ -18,8 +18,7 @@ Web Server Project - Game Level 1
 <body>
     
     <?php
-        require_once "gameControllerL12.php";    
-        $_SESSION['level'] = 1;
+        require_once "gameControllerL12.php";        
         require_once "functions.php";
     ?>
 
@@ -30,8 +29,7 @@ Web Server Project - Game Level 1
         <p>Please <?php echo $instructions; ?> (from a to z).</p>
         <p>Use ',' between each letter (Example: a,b,c,d,e,f).</p>
 
-        <?php
-        
+        <?php        
         
         if(!empty($answer_err)){
             echo '<div class="alert alert-danger">' . $answer_err . '</div>';}        
@@ -39,7 +37,7 @@ Web Server Project - Game Level 1
 
         <form name="sign-in" action="game1.php" method="post">
             <div class="form-group">
-                
+                <input type="hidden" name="form_id" value="1">
                 <label for="">Letters to order: </label>
                 <input type="text" name="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
 

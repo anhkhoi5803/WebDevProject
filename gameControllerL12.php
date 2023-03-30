@@ -7,13 +7,17 @@
     if(!isset($_SESSION['loggedin']) && !$_SESSION['loggedin'] === true) {
         session_dest();
     }
-
-    $gameLevel = (int)$_SESSION['level'];
+    
+    if (strpos($_SERVER['SCRIPT_FILENAME'], 'game1.php') !== false) {
+        $gameLevel = 1;
+    } else {
+        $gameLevel = 2;
+    } 
 
     $answer_placeholder = "Enter your answer";
     $dbMain = new ManipulateDB(); 
     $playerWon = FALSE;
-    $submitPressed = FALSE;
+    $submitPressed = FALSE;   
 
     getInstructions();
 
@@ -29,13 +33,12 @@
             }
             setData($dbMain);
             $dbMain->insertScore();        
-            session_dest();
-            
+            session_dest();            
         }
 
         if(isset($_POST["next_level"])) {
             
-            if ($_SERVER['PHP_SELF'] == "/game1.php") { 
+            if ($_SERVER['PHP_SELF'] == "/game1.php") {
                                
                 header("Location: game2.php");
                 exit;

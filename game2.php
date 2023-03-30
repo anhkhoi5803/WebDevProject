@@ -8,8 +8,7 @@ Web Server Project - Game Level 2
 
 <?php
 
-    require_once "gameControllerL12.php";
-    $_SESSION['level'] = 2;
+    require_once "gameControllerL12.php";    
     require_once "functions.php";
     
 ?>
@@ -19,7 +18,7 @@ Web Server Project - Game Level 2
 
 <head>
     <meta charset="UTF-8">
-    <title>Game Leve 2</title>
+    <title>Game Level 2</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
@@ -37,9 +36,9 @@ Web Server Project - Game Level 2
             echo '<div class="alert alert-danger">' . $answer_err . '</div>';}        
         ?>
 
-        <form name="sign-in" action="game1.php" method="post">
+        <form name="sign-in" action="game2.php" method="post">
             <div class="form-group">
-                
+                <input type="hidden" name="form_id" value="2">
                 <label for="">Letters to order: </label>
                 <input type="text" name="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
 
