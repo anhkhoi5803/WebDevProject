@@ -49,7 +49,7 @@ require_once "game3Controller.php";
                 <label for="">Game Numbers</label>
                 <input type="text" name="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
                 <label for="answer_num">Answer</label>
-                <input type="text" name="answer" id="answer_num" class="form-control <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
+                <input type="text" name="answer" id="answer_num" autocomplete="off" class="form-control <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
                 <span class="invalid-feedback"><?php echo $answer_err; ?></span>
 
                 <?php 
@@ -79,8 +79,8 @@ require_once "game3Controller.php";
 
                         //if(count($_SESSION['gainedLevels']) == TOTAL_LEVELS || $_SESSION['livesUsed'] > TOTAL_LIVES) {
                         if($_SESSION['livesUsed'] > TOTAL_LIVES) {
-                            echo <<<_GAMEOVER
                             //echo <<<_WON_GAMEOVER
+                            echo <<<_GAMEOVER
                             <input type="submit" class="btn btn-primary" value="Home Page" name="home_page">
                             <input type="submit" class="btn btn-primary" value="Play Again" name="play_again">
                             <input type="submit" class="btn btn-primary" value="Sign-Out" name="sign-out">
