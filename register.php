@@ -12,7 +12,7 @@ require_once "functions.php";
 require_once "registerController.php";
 
 if (isset($_SESSION['mensaje'])) {
-    echo "<div class='mensaje'>" . $_SESSION['mensaje'] . "</div>";
+    echo '<div class="alert alert-danger">' . $_SESSION['mensaje'] . "</div>";
     unset($_SESSION['mensaje']);
 }
 ?>

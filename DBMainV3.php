@@ -81,9 +81,9 @@ class ManipulateDB
         )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
         
         CREATE VIEW history AS
-            SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
-            FROM player p, score s
-            WHERE p.registrationOrder = s.registrationOrder;
+        SELECT s.scoreTime, p.id, p.fName, p.lName, s.result, s.livesUsed 
+        FROM player p, score s
+        WHERE p.registrationOrder = s.registrationOrder;
         ";
 
         $sqlCode['selectTab'] = "SELECT * FROM player;";
@@ -488,7 +488,7 @@ class ManipulateDB
             //2-Connect to the DB
             if ($this->connectToDB() === TRUE) {
                 
-                if(validatePasswordModify()){
+                if(validateNoError()){
                         
                     if ($this->executeSql($this->sqlCode()['userNameExist']) === TRUE) {
                         
