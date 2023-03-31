@@ -20,7 +20,7 @@ require_once "loginController.php";
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
-<body class="login_body">
+<body>
     <?php
         //require_once "header.php";
         require_once "navBar.php";

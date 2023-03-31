@@ -279,25 +279,18 @@ function compareArrayNumbersLetters() {
     global $resultLevel;
     global $instructions;
     $numbersOrLetters = getStringNumbersOrLetters();
+    $ascendingOrDescending = (strpos($instructions, "ascending")) ? "ascending" : "descending";
+    
     $arrIntersec = array_intersect($gameNumLetterArrSorted, $answerArr);
     if(empty($arrIntersec)){
         $resultLevel = "Incorrect - All your " . $numbersOrLetters . " are different than ours";
     } else {
         if(count($arrIntersec) == TOTAL_ANSWER_ARRAY_LEVEL_1_2_3_4) {
             if($gameNumLetterArrSorted === $answerArr){
-                if(strpos($resultLevel, "ascending")) 
-                    $resultLevel = "Correct - Your " . $numbersOrLetters . " have been correctly ordered in ascending order";
-                    else{
-                        $resultLevel = "Correct - Your " . $numbersOrLetters . " have been correctly ordered in descending order";
-                    }
+                $resultLevel = "Correct - Your " . $numbersOrLetters . " have been correctly ordered in " . $ascendingOrDescending . " order";
             }else{
-                if(strpos($resultLevel, "ascending")){
-                    $resultLevel = "Incorrect - Your " . $numbersOrLetters . " have not been correctly ordered in ascending order";
-                }else{
-                    $resultLevel = "Incorrect - Your " . $numbersOrLetters . " have not been correctly ordered in descending order";
-                }               
+                $resultLevel = "Incorrect - Your " . $numbersOrLetters . " have not been correctly ordered in " . $ascendingOrDescending . " order";
             }           
-            
         }else {
             $resultLevel = "Incorrect - Some of your " . $numbersOrLetters . " are different than ours";
         }
@@ -471,7 +464,6 @@ function getResultLevelMsg() {
 
 
 function resetLivesAndDateTimeSession(){
-    session_start();
     $_SESSION['livesUsed'] = 1;
     $_SESSION['startTime'] = date('Y-m-d H:i:s');
     $_SESSION['gainedLevels'] = [];
@@ -497,6 +489,16 @@ function session_dest(){
     session_destroy();
     header("location: login.php");
     exit;
+}
+
+function checkPlayerCanAccessLevelOrRedirectPlayer() {
+    
+    global $gameLevel;
+    
+    if(isset($_SESSION['loggedin']) && !(in_array(($gameLevel-1), $_SESSION['gainedLevels'], true))) {
+        header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
+        exit;
+    }
 }
 
 
