@@ -48,8 +48,8 @@ require_once "game4Controller.php";
             <div class="form-group">
                 <label for="">Game Numbers</label>
                 <input type="text" name="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
-                <label for="answer_num">Answer</label>
-                <input type="text" name="answer" id="answer_num" autocomplete="off" class="form-control <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
+                <label for="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>">Answer</label>
+                <input type="text" name="answer" id="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>" autocomplete="off" class="form-control <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
                 <span class="invalid-feedback"><?php echo $answer_err; ?></span>
 
                 <?php 
