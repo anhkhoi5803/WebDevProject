@@ -8,21 +8,22 @@ require "game5Controller.php";
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Game Leve 6</title>
+    <title>Game Leve 5</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!--<link rel="stylesheet" href="./css/style.css">-->
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <?php
         //require_once "header.php";
         require_once "navBar.php";
     ?>
-    <div class="wrapper p-5">
-        <h2>Game Level 5: <?php echo $instructions; ?></h2>
-        <p>Please <?php echo $instructions; ?> (from a to z).</p>
-        <p>** put ',' between the letters (Example: a,b,c,d,e).</p>
-        <p>** put the first letter before the latter letter (Example: a,z).</p>
-
+    <div class="content">
+        <div class="content__container">
+        <h2 class="content__heading"> <span>Game Level 5</span>: <?php echo $instructions; ?></h2>
+        <p class="content__desc"">Please <?php echo $instructions; ?> (from a to z).</p>
+        <p class="content__desc">** put ',' between the letters (Example: a,b,c,d,e).</p>
+        <p class="content__desc">** put the first letter before the latter letter (Example: a,z).</p>
+        </div>
 
         <?php 
 
@@ -33,7 +34,7 @@ require "game5Controller.php";
 
         <form name="sign-in" action="game5.php" method="post">
             <div class="form-group">
-                <label for="answer">Answer</label>
+                <label class="content__desc" for="answer">Answer</label>
                 <input type="text" name="answer" id="answer" class="form-control <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
                 <span class="invalid-feedback"><?php echo $answer_err; ?></span>
                 <label for="">Game Numbers</label>
@@ -54,7 +55,7 @@ require "game5Controller.php";
                 <?php
                     if (!$submitPressed || !empty($answer_err)) {
                         echo <<<_NOTSUBMIT
-                            <input type="submit" class="btn btn-primary" value="Submit Answer" name="send">
+                            <input type="submit" class="game_btn" value="Submit Answer" name="send">
                         _NOTSUBMIT;
                     } else {
 
@@ -76,7 +77,7 @@ require "game5Controller.php";
                                 _NOTWON;
                             } else {
                                 echo <<<_WON
-                                <input type="submit" class="btn btn-primary" value="Go the Next Level" name="next_level">   
+                                <input type="submit" class="btn btn-primary " value="Go the Next Level" name="next_level">   
                                 _WON;
                             }
 

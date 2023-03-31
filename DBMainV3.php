@@ -507,8 +507,8 @@ class ManipulateDB
                                 die($this->messages()['error']['insertTab']);
                             }
                             else{
-                                echo "Redirecting to login page";
-                                header("Refresh:10 ;location: login.php");
+                                header("location: login.php");
+                                exit();
                             }
 
 

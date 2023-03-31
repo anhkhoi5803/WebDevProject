@@ -17,8 +17,11 @@ require_once "passwordModPost.php";
         body{ font: 14px sans-serif; }
         .wrapper{ width: 360px; padding: 20px; }
     </style>
+
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <?php require"navBar.php" ?>
     <div class="wrapper">
         <h2>Password Modifier</h2>
         <p>Please fill in this form to modify your account.</p>
@@ -49,5 +52,7 @@ require_once "passwordModPost.php";
             <p>Already have an account? <a href="">Login here</a>.</p>
         </form>
     </div>    
+
+    <?php require"footer.php" ?>
 </body>
 </html>

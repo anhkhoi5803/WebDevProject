@@ -42,15 +42,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         if($_SESSION['livesUsed'] > TOTAL_LIVES) {
             $_SESSION['result'] = 'failure';
         }
-
-        $dbMain->username = $_SESSION['username'];
-        $dbMain->firstname = $_SESSION['fName'];
-        $dbMain->lastname = $_SESSION['lName'];
-        $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
-        $dbMain->scoreTime = date('Y-m-d H:i:s');
-        $dbMain->result = $_SESSION['result'];
-        $dbMain->livesUsed = $_SESSION['livesUsed'];
-
+        setData($dbMain);
         $dbMain->insertScore();
         
         session_destroy();
@@ -106,13 +98,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                         
                         $_SESSION['result'] = 'success';
 
-                        $dbMain->username = $_SESSION['username'];
-                        $dbMain->firstname = $_SESSION['fName'];
-                        $dbMain->lastname = $_SESSION['lName'];
-                        $dbMain->registrationOrder = $_SESSION['registrationOrder'];
-                        $dbMain->scoreTime = date('Y-m-d H:i:s');
-                        $dbMain->result = $_SESSION['result'];
-                        $dbMain->livesUsed = $_SESSION['livesUsed'];
+                        setData($dbMain);
 
                         $resultLevelMsg = $resultLevelMsg . '<br/><br/>Congratulations!! You have won all the ' . TOTAL_LEVELS . ' levels!';
 
@@ -123,14 +109,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if($_SESSION['livesUsed'] >= TOTAL_LIVES) {
                     $_SESSION['result'] = 'failure';
-
-                    $dbMain->username = $_SESSION['username'];
-                    $dbMain->firstname = $_SESSION['fName'];
-                    $dbMain->lastname = $_SESSION['lName'];
-                    $dbMain->registrationOrder = $_SESSION['registrationOrder'];    
-                    $dbMain->scoreTime = date('Y-m-d H:i:s');
-                    $dbMain->result = $_SESSION['result'];
-                    $dbMain->livesUsed = $_SESSION['livesUsed'];
+                    setData($dbMain);
 
                     $resultLevelMsg = $resultLevelMsg . '<br/><br/>Well Played. Try again later!! You have used all the ' . TOTAL_LIVES . ' lives!';
 
@@ -154,86 +133,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 }
-
-?>
-
-<?php
-    // if(isset($_POST['send'])){
-    //     $min = $_POST['minNum'];
-    //     $max = $_POST['maxNum'];
-    //     $arr = $_SESSION['arr'];
-    //     if(getError())
-    //         checkNums();
-    //     }
-    // function generateRandomNums(&$arr){
-    //     $temp = rand(0,100);
-    //     if(in_array($temp,$arr)){
-    //         generateRandomNums($arr);
-    //     }
-    //     else{
-    //         array_push($arr,$temp);
-    //     }
-    // }
-    // if(!isset($_POST['send'])){
-    //     session_start();
-    //         $_SESSION['arr'] =array();
-    //         if(count($_SESSION['arr'])===0){
-    //             $array = array();
-    
-    //             for($i = 0;$i<6;$i++){
-    //                 generateRandomNums($array);
-    //             }
-    //             $_SESSION['arr']= $array;
-    //         }
-    //     }
-    
-    
-    // function getError(){
-    //     global $min;
-    //     global $max;
-    //     global $arr;
-
-    //     if(!in_array($min,$arr)and !in_array($max,$arr) ){
-    //         echo "Both the number you entered is not in the array";
-    //         return false;
-    //     }
-    //     elseif (!in_array($min,$arr) || !in_array($max,$arr)) {
-    //         echo "One of the number you entered is not in the array";
-    //         return false;
-    //     }
-    //     else{
-    //         echo "Both the number you entered is in the array";
-    //         return true;
-    //     }
-
-    // }
-
-    // function checkNums(){
-    //     global $min;
-    //     global $max;
-    //     global $arr;
-
-    //     if($max === max($arr) && $min === min($arr)){
-    //         echo "Both the maximum and minimum you entered is right";
-    //         return true;
-    //     }
-    //     elseif ($max !== max($arr) && $min === min($arr)) {
-    //         echo "The minimum you entered is right";
-    //         return false;
-
-    //     }
-    //     elseif ($max === max($arr) && $min !== min($arr)) {
-    //         echo "The maximum you entered is right";
-    //         return false;
-
-    //     }
-    //     else{
-    //         echo "Both the maximum and minimum you entered is wrong";
-    //         return false;
-
-    //     }
-    // }
-
-
 
 ?>
