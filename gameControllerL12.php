@@ -21,6 +21,10 @@
 
     getInstructions();
 
+    if($gameLevel == 2){
+        checkPlayerCanAccessLevelOrRedirectPlayer();
+    }
+
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if( isset($_POST['sign-out']) ) {
@@ -28,7 +32,7 @@
         }        
 
         if( isset($_POST['stop_session']) ) {
-            if($_SESSION['livesUsed'] > TOTAL_LIVES) {
+            if($_SESSION['livesUsed'] >= TOTAL_LIVES) {
                 $_SESSION['result'] = 'failure';
             }
             setData($dbMain);
@@ -36,37 +40,54 @@
             session_dest();            
         }
 
-        if(isset($_POST["next_level"])) {
+        // if(isset($_POST["next_level"])) {
             
-            if ($_SERVER['PHP_SELF'] == "/game1.php") {
+        //     if ($_SERVER['PHP_SELF'] == "/game1.php") {
                                
-                header("Location: game2.php");
-                exit;
-            }else{
-                header("location: game3.php");
-                exit;
-            }
+        //         header("Location: game2.php");
+        //         exit;
+        //     }else{
+        //         header("location: game3.php");
+        //         exit;
+        //     }
+        // }
+
+        if(isset($_POST["previous_level"])) {
+            header("location: game" . ($gameLevel-1) . ".php");
+            exit;
+        }
+
+        if(isset($_POST["next_level"])) {
+            header("location: game" . ($gameLevel+1) . ".php");
+            exit;
         }
 
         if(isset($_POST["play_again"])) {
-            //resetLivesAndDateTimeSession();
-
-            if ($_SERVER['PHP_SELF'] == "/game2.php") {                
-                header("Location: game2.php");
-                exit;
-            }else{
-                header("location: game1.php");
-                exit;
-            }
+            resetLivesAndDateTimeSession();
+            header("location: game1.php");
+            exit;
         }
+
+        // if(isset($_POST["play_again"])) {  // Play again is when the user win or lose, so the session need to be reseted and goes to game 1
+        //     //resetLivesAndDateTimeSession();
+
+        //     if ($_SERVER['PHP_SELF'] == "/game2.php") {                
+        //         header("Location: game2.php");
+        //         exit;
+        //     }else{
+        //         header("location: game1.php");
+        //         exit;
+        //     }
+        // }
 
         if(isset($_POST["home_page"])) {
             resetLivesAndDateTimeSession();
-            header("location: login.php");
+            header("location: index.php");
             exit;
         }
 
         if($_SESSION['livesUsed'] > TOTAL_LIVES) {
+            
             session_dest();
         }
 
@@ -88,28 +109,36 @@
 
                     if(!(in_array($gameLevel, $_SESSION['gainedLevels'], true))) {                        
                         array_push($_SESSION['gainedLevels'], $gameLevel);
-                        echo count($_SESSION['gainedLevels']);
-                        if(count($_SESSION['gainedLevels']) == TOTAL_LEVELS){                            
-                            $_SESSION['result'] = 'success';
-                            setData($dbMain);
-                            $resultLevelMsg = $resultLevelMsg . '<br/><br/>Congratulations!! You have won all the ' . TOTAL_LEVELS . ' levels!';
-                            $dbMain->insertScore();
-                        }
+
                     }
                 }else {
-                    if($_SESSION['livesUsed'] >= TOTAL_LIVES) {
-                        $_SESSION['result'] = 'failure';
-                        setData($dbMain);
-                        $resultLevelMsg = $resultLevelMsg . '<br/><br/>Well Played. Try again later!! You have used all the ' . TOTAL_LIVES . ' lives!';
-                        $dbMain->insertScore();
-                        $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
-                    } else {
+                    if(!(in_array($gameLevel, $_SESSION['gainedLevels'], true))) {
+                        if($_SESSION['livesUsed'] >= TOTAL_LIVES) {
+                            $_SESSION['result'] = 'failure';
+                            setData($dbMain);
+                            $resultLevelMsg = $resultLevelMsg . '<br/><br/>Well Played. Try again later!! You have used all the ' . TOTAL_LIVES . ' lives!';
+                            $dbMain->insertScore();
+
+                        } 
+                        
                         $_SESSION['livesUsed'] = $_SESSION['livesUsed'] + 1;
                     }
                 }
             }
-        }else {generateNumbersLetters();}
+        }else {
+            generateNumbersLetters();
+            if($_SESSION['livesUsed'] > TOTAL_LIVES) {
+            
+                session_dest();
+            }
+        }
 
-    } else {generateNumbersLetters();}
+    } else {
+        generateNumbersLetters();
+        if($_SESSION['livesUsed'] > TOTAL_LIVES) {
+            
+            session_dest();
+        }
+    }
 
 ?>

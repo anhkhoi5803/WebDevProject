@@ -311,8 +311,7 @@ function checkMinMaxNumber() {
     foreach($answerArr as $n){
         $ansArr[] = intval($n);
     }
-    var_dump($ansArr);
-    var_dump($gameArr);
+
     if(empty($arrIntersec)){
         $resultLevel = "Incorrect - All your " . $numbersOrLetters . " are different than ours";
     } else {
@@ -496,7 +495,11 @@ function checkPlayerCanAccessLevelOrRedirectPlayer() {
     global $gameLevel;
     
     if(isset($_SESSION['loggedin']) && !(in_array(($gameLevel-1), $_SESSION['gainedLevels'], true))) {
-        header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
+        if(!(in_array(6, $_SESSION['gainedLevels']))){
+            header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
+        } else{
+            header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1])) . ".php");
+        }
         exit;
     }
 }

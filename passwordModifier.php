@@ -13,12 +13,11 @@ require_once "passwordModPost.php";
     <meta charset="UTF-8">
     <title>Sign Up</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- <style>
         body{ font: 14px sans-serif; }
         .wrapper{ width: 360px; padding: 20px; }
-    </style>
-
-<link rel="stylesheet" href="/css/style.css">
+    </style> -->
 </head>
 <body>
     <?php require"navBar.php" ?>
@@ -49,7 +48,7 @@ require_once "passwordModPost.php";
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Modify">                
             </div>
-            <p>Already have an account? <a href="">Login here</a>.</p>
+            <p>Already have an account? <a href="./login.php">Login here</a>.</p>
         </form>
     </div>    
 
