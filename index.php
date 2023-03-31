@@ -1,7 +1,7 @@
 <?php
 
     require('DBMainV3.php');
-    // include(__DIR__."/css/style.css"); <link rel="stylesheet" href="<?php echo __DIR__."/css/style.css"?>">
+
 
 ?>
 <!DOCTYPE html>
@@ -25,17 +25,12 @@
 
     <div class="hero" id="home">
             <div class="hero__container">
-                <h1 class="hero__heading">Web developement Final Project</h1>
+                <h1 class="hero__heading">Web developement <span>Final Project</span></h1>
                 <p class="hero__desc">Login to play</p>
-                <button class="main__btn"><a href="#">Login</a></button>
+                <button class="main__btn"><a href="login.php">Login</a></button>
             </div>
-        </div>
-    
-    <div class="wrapper p-5">
 
-        
-
-        <?php
+            <?php
         $db = new ManipulateDB();
 
         $db->createDBandTAB();
@@ -45,10 +40,12 @@
 
         
         ?>
-    </div>
+        </div>
+
+   
 
     <?php
-        require_once "footer.php";
+       require_once "footer.php";
     ?>
 </body>
 </html>

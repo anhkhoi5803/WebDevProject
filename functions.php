@@ -342,16 +342,7 @@ function checkFirstLastLetter(){
     global $resultLevel;
     $numbersOrLetters = getStringNumbersOrLetters();
     $arrIntersec = array_intersect($gameNumLetterArrSorted, $answerArr);
-    // $gameArr =sort($gameNumLetterArr);
-    // // foreach($gameNumLetterArr as $n){
-    // //     $gameArr[] = intval($n);
-    // // }
-    // $ansArr = $answerArr;
-    // // foreach($answerArr as $n){
-    // //     $ansArr[] = intval($n);
-    // // }
-    var_dump($gameNumLetterArrSorted);
-    var_dump($answerArr);
+
     if(empty($arrIntersec)){
         $resultLevel = "Incorrect - All your " . $numbersOrLetters . " are different than ours";
     } else {
