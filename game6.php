@@ -20,15 +20,15 @@ require "game6Controller.php";
         //require_once "header.php";
         require_once "navBar.php";
     ?>
-    <div class="content">
-        <div class="content__container">
+    <div class="content p-5">
+        <article class="content__container">
         <h2 class="content__heading is-valid"> <span>Game Level <?php echo $gameLevel . ":"; ?></span>: <?php echo $instructions; ?></h2>
-        <h5>Player: <?php echo (isset($_SESSION['loggedin'])) ? $_SESSION['fName'] . " " . $_SESSION['lName'] . " | Current Live: " : "" ;?> <?php echo (isset($_SESSION['loggedin']) && $_SESSION['livesUsed'] <= TOTAL_LIVES) ? $_SESSION['livesUsed'] : ($_SESSION['livesUsed'] - 1) ;?></h5>
+        <h5 class="content__desc">Player: <?php echo (isset($_SESSION['loggedin'])) ? $_SESSION['fName'] . " " . $_SESSION['lName'] . " | Current Live: " : "" ;?> <?php echo (isset($_SESSION['loggedin']) && $_SESSION['livesUsed'] <= TOTAL_LIVES) ? $_SESSION['livesUsed'] : ($_SESSION['livesUsed'] - 1) ;?></h5>
         <span class="valid-feedback"><?php echo (isset($_SESSION['loggedin']) && (in_array(($gameLevel), $_SESSION['gainedLevels'], true))) ? 'You Have Already Won This Level (Any mistake will not increase the used lives)' : '';?></span>
         <p class="content__desc">Please <?php echo $instructions; ?> (from 100 to 0).</p>
         <p class="content__desc">** put ',' between the numbers (Example: 5,4,3,2,1,0).</p>
         <p class="content__desc">** put the minimum number before the maximum number (Example: 11,23).</p>
-        </div>
+        </article>
 
         <?php 
 

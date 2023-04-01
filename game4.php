@@ -28,13 +28,14 @@ require_once "game4Controller.php";
         //require_once "header.php";
         require_once "navBar.php";
     ?>
-    <div class="wrapper p-5">
-        <h2 class="is-valid">Game Level <?php echo $gameLevel . ":"; ?> <?php echo $instructions; ?></h2>
-        <h5>Player: <?php echo (isset($_SESSION['loggedin'])) ? $_SESSION['fName'] . " " . $_SESSION['lName'] . " | Current Live: " : "" ;?> <?php echo (isset($_SESSION['loggedin']) && $_SESSION['livesUsed'] <= TOTAL_LIVES) ? $_SESSION['livesUsed'] : ($_SESSION['livesUsed'] - 1) ;?></h5>
+     <div class="content p-5">
+    <article class="content__container">
+        <h2 class="content__heading is-valid"><span>Game Level <?php echo $gameLevel . ":"; ?></span> <?php echo $instructions; ?></h2>
+        <h5 class="content__desc">Player: <?php echo (isset($_SESSION['loggedin'])) ? $_SESSION['fName'] . " " . $_SESSION['lName'] . " | Current Live: " : "" ;?> <?php echo (isset($_SESSION['loggedin']) && $_SESSION['livesUsed'] <= TOTAL_LIVES) ? $_SESSION['livesUsed'] : ($_SESSION['livesUsed'] - 1) ;?></h5>
         <span class="valid-feedback"><?php echo (isset($_SESSION['loggedin']) && (in_array(($gameLevel), $_SESSION['gainedLevels'], true))) ? 'You Have Already Won This Level (Any mistake will not increase the used lives)' : '';?></span>
-        <p>Please <?php echo $instructions; ?> (from 100 to 0).</p>
-        <p>** put ',' between the numbers (Example: 5,4,3,2,1,0).</p>
-
+        <p class="content__desc">Please <?php echo $instructions; ?> (from 100 to 0).</p>
+        <p class="content__desc">** put ',' between the numbers (Example: 5,4,3,2,1,0).</p>
+        </article>
         <?php 
 
         if(!empty($answer_err)){
@@ -44,10 +45,10 @@ require_once "game4Controller.php";
 
         <form name="sign-in" action="game4.php" method="post">
             <div class="form-group">
-                <label for="game_num_letters">Game <?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'Numbers' : 'Letters'; ?></label>
+                <label class="content__desc" for="game_num_letters">Game <?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'Numbers' : 'Letters'; ?></label>
                 <input type="text" name="game_num_letters" id="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
                 
-                <label for="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>">Answer</label>
+                <label class="content__desc" for="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>">Answer</label>
                 <input type="text" name="answer" id="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>" autocomplete="off" class="form-control content__desc <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
                 <span class="invalid-feedback"><?php echo $answer_err; ?></span>
 
@@ -62,7 +63,7 @@ require_once "game4Controller.php";
                 ?>
 
             </div>    
-            <div class="form-group">
+            <div class="form-group game_wrap">
             <?php
                     if (!$submitPressed || !empty($answer_err)) {
                         echo <<<_NOTSUBMIT
