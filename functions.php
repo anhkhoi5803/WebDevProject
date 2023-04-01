@@ -495,7 +495,7 @@ function checkPlayerCanAccessLevelOrRedirectPlayer() {
     global $gameLevel;
     
     if(isset($_SESSION['loggedin']) && !(in_array(($gameLevel-1), $_SESSION['gainedLevels'], true))) {
-        if(!(in_array(6, $_SESSION['gainedLevels']))){
+        if(!(in_array(TOTAL_LEVELS, $_SESSION['gainedLevels']))){
             header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1]) + 1) . ".php");
         } else{
             header("location: game" . ( ($_SESSION['gainedLevels'][count($_SESSION['gainedLevels'])-1])) . ".php");

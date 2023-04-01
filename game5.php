@@ -42,7 +42,7 @@ require "game5Controller.php";
                 <label class="content__desc" for="game_num_letters">Game <?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'Numbers' : 'Letters'; ?></label>
                 <input type="text" name="game_num_letters" id="game_num_letters" class="form-control read-only" readonly value="<?php echo $gameNumLetterString; ?>">
                 
-                <label class="content__desc" class="content__desc" for="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>">Answer</label>
+                <label class="content__desc" for="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>">Answer</label>
                 <input type="text" name="answer" id="<?php echo ($gameLevel == 3 || $gameLevel == 4 || $gameLevel == 6) ? 'answer_num' : 'answer_let'; ?>" autocomplete="off" class="form-control content__desc <?php echo (!empty($answer_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $answer; ?>" placeholder="<?php echo $answer_placeholder; ?>">
                 <span class="invalid-feedback"><?php echo $answer_err; ?></span>
 
