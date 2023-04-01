@@ -9,7 +9,7 @@ Web Server Project - Game Level 1
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>History Game<?php echo $gameLevel; ?></title>
+    <title>History Game</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./js/jquery-3.6.1.min.js"></script>
