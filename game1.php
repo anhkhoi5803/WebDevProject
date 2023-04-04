@@ -8,6 +8,11 @@ Web Server Project - Game Level 1
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+        require_once "gameControllerL12.php";        
+        //require_once "functions.php";
+?>
+
 <head>
     <meta charset="UTF-8">
     <title>Game Leve <?php echo $gameLevel; ?></title>
@@ -20,10 +25,10 @@ Web Server Project - Game Level 1
 
 <body>
     
-    <?php
-        require_once "gameControllerL12.php";        
+    <!--<?php
+        //require_once "gameControllerL12.php";        
         //require_once "functions.php";
-    ?>
+    ?>-->
 
     <?php require_once "navBar.php";?>
     

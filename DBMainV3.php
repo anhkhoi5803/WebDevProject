@@ -132,7 +132,7 @@ class ManipulateDB
         $sqlCode['insertPassword'] = "INSERT INTO authenticator(passCode,registrationOrder)
         VALUES(?, ?)";
         // added (ronald)
-        $sqlCode['history'] = "SELECT scoreTime, id, fName, lName, result, livesUsed FROM mi_vista";
+        $sqlCode['history'] = "SELECT scoreTime, id, fName, lName, result, livesUsed FROM history";
 
         $sqlCode['changePassword']="UPDATE authenticator SET passCode = '$this->newPassword' where registrationOrder= $this->registrationOrder";
             
