@@ -375,6 +375,7 @@ body {
   background: #000 ;
   background: linear-gradient(to right, #161616, #000);
   padding:100px 0;
+  height: 70vh;
 }
 
 .content__container{
@@ -384,7 +385,7 @@ body {
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  height: 90%;
+  height: 100%;
   text-align: center;
   padding: 40px;
 }
