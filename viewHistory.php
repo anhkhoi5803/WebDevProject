@@ -20,23 +20,21 @@ Web Server Project - Game Level 1
 <body>    
     <?php require_once "functions.php";?>    
     <?php require_once "navBar.php";?>    
-    <div class="content">
     <table class="tabla-score">
         <thead>
-            <!-- <tr>
+            <tr>
                 <th>SCORE TIME</th>
                 <th>ID</th>
                 <th>NAME</th>
                 <th>LAST NAME</th>
                 <th>RESULT</th>
                 <th>USED LIVES</th>
-            </tr> -->
+            </tr>
         </thead>
         <tbody>
             <?php require_once "viewHistoryController.php";?>            
         </tbody>
     </table>
-    </div> 
 
     <?php require_once "footer.php";?>
 </body>
